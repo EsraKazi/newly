@@ -1,71 +1,43 @@
-var userSchema = require('./userModel')
 const mongoose = require("mongoose");
 
-const reservationSchema = mongoose.Schema = ({
-    
-    agency : { // Kalanit, Pegas, Sava + MANUEL OTHER
-        type : String,
-        required : true
-    },    
-    /*checkInDate : {
-        type : Date,
-        min: ,
-        max : ,
-        required : true
-    },    
-    checkOutDate : {
-        type : Date,
-        min: ,
-        max : ,
-        required : true
-    }, */
-    roomType : {
-        type : String,
-        required : true
-    },
-    
-    employee: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Agency',
-        required : true
+const reservationSchema = mongoose.Schema({
+    requestType:{
+        type:String,
+        
     }
-})
-
-module.exports = mongoose.model('Reservation',reservationSchema);
-
-/*var userSchema = require('./userModel')
-const mongoose = require("mongoose");
-
-const reservationSchema = mongoose.Schema = ({
-    
-    agency : { // Kalanit, Pegas, Sava + MANUEL OTHER
-        type: Schema.Types.ObjectId, 
-        ref: 'Agency',
-        required : true
+    checkInDate: {
+        type: Date,
+        required: true
+        // Add min and max if needed
     },    
-    checkInDate : {
-        type : Date,
-        min: ,
-        max : ,
-        required : true
-    },    
-    checkOutDate : {
-        type : Date,
-        min: ,
-        max : ,
-        required : true
+    checkOutDate: {
+        type: Date,
+        required: true
+        // Add min and max if needed
     }, 
-    roomType : {
-        type: Schema.Types.ObjectId, 
+    roomType: { 
+        type: mongoose.Schema.Types.ObjectId, // Use mongoose.Schema.Types.ObjectId
         ref: 'Room',
-        required : true
+        required: true
     },
+    
+    agency: { // Kalanit, Pegas, Sava + MANUEL OTHER
+        type: mongoose.Schema.Types.ObjectId, // Use mongoose.Schema.Types.ObjectId
+        ref: 'Agency',
+        required: true
+    },    
     
     addedBy: { 
-        type: Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, // Use mongoose.Schema.Types.ObjectId
         ref: 'User',
-        required : true
+        required: true
+    },
+
+    status: {
+        type : String,
+        required: true,
+        default : "pending"
     }
 })
 
-module.exports = mongoose.model('Reservation',reservationSchema); */
+module.exports = mongoose.model('Reservation', reservationSchema);

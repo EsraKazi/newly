@@ -4,6 +4,7 @@ const agencySchema = mongoose.Schema({
 
     agencyName: {
         type : String,
+        unique: true,
         required : true
     }
 });

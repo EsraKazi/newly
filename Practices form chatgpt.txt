@@ -1,0 +1,59 @@
+
+Shared Routes:
+
+router.get('/shared-route', (req, res) => {
+  const { userRole } = req.user;
+
+  if (userRole === 'Mng') {
+    // Logic for managers
+  } else if (userRole === 'CC') {
+    // Logic for users with restricted access
+  } else {
+    res.status(403).send('Access denied');
+  }
+});
+
+
+reservation-management-system/
+├── controllers/
+│   ├── authController.js
+│   ├── reservationController.js
+│   └── roomController.js
+├── middleware/
+│   ├── authenticationMiddleware.js
+│   ├── authorizationMiddleware.js
+│   └── validationMiddleware.js
+├── models/
+│   ├── reservationModel.js
+│   ├── roomModel.js
+│   └── userModel.js
+├── routes/
+│   ├── authRoute.js
+│   ├── reservationRoute.js
+│   ├── roomRoute.js
+│   └── userRoute.js
+├── views/
+│   ├── auth/
+│   │   ├── login.ejs
+│   │   └── signup.ejs
+│   ├── reservation/
+│   │   ├── create.ejs
+│   │   ├── edit.ejs
+│   │   └── list.ejs
+│   ├── room/
+│   │   ├── create.ejs
+│   │   └── list.ejs
+│   ├── user/
+│   │   ├── profile.ejs
+│   │   └── settings.ejs
+│   ├── layouts/
+│   │   ├── mainLayout.ejs
+│   │   └── authLayout.ejs
+│   └── partials/
+│       ├── header.ejs
+│       └── footer.ejs
+├── app.js
+├── config.js
+├── jwtToken.js
+├── package.json
+└── README.md
