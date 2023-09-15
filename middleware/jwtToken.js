@@ -3,14 +3,18 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 
-const secretKey = crypto.randomBytes(32).toString('hex');
-process.env.SECRET_KEY = secretKey;
+
+process.env.SECRET_KEY = crypto.randomBytes(64).toString('hex');
 
 function generateToken(userData) {
-    return jwt.sign(userData, secretKey, { expiresIn: '1h' });
+    return jwt.sign(userData, process.env.SECRET_KEY , { expiresIn: '1h' });
+}
+function deleteToken(){
+    res.cookie('jwt', '', { expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
+
 }
 
 module.exports = {
     generateToken,
-    secretKey,
+    deleteToken
 };

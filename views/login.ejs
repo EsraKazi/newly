@@ -1,20 +1,30 @@
-<header>
-    <%- include("../views/partials/header", {title:'Swandor'})-%>
-</header>
-<body>
-    <form action="/login" method="POST">
-      <fieldset>
-        <label>Kullanıcı Adı</label>
-        <input type ="text" id = 'username' name="username" required>
-        <br><br>
-        <label>Parola</label>
-        <input type="password" id = "password" name="password" required>
-        <br><br>
-        <button type ="submit">Giriş Yap!</button>
-      </fieldset>
-    </form>
-</body>
-<footer >
-    <%- include("../views/partials/footer")-%>
-</footer>
-</html>
+<%- include("../views/partials/header", { title: 'Swandor' })-%>
+<section class="h-100 gradient-form d-flex justify-content-center align-items-center" style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card rounded-3 text-black">
+          <div class="card-body p-md-5 mx-md-4">
+            <div class="text-center">
+              <img src="https://play-lh.googleusercontent.com/FonfjGzxQphWL4Eql-cGsTs8GBjTJxJ4BlXRhW_mWouYbFIVET5BTI0rgBGH_x6ZRQ=w600-h300-pc0xffffff-pd"
+                alt="logo">
+              <h4 class="mt-1 mb-5 pb-1">Swandor Hotels & Resorts Topkapı Palace</h4>
+            </div>
+            <form action="/signUp" method="POST">
+              <div class="form-outline mb-4">
+                <input type="text" id="username" class="form-control" placeholder="Kullanıcı Adı" />
+              </div>
+              <div class="form-outline mb-4">
+                <input type="password" id="form2Example22" class="form-control" placeholder="Şifre" />
+              </div>
+              <div class="text-center pt-1 mb-5 pb-1">
+                <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Giriş Yap</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include("../views/partials/footer")-%>

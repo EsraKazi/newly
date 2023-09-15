@@ -1,15 +1,34 @@
-//CHCK USER ROLE AND GIVE ACCESS TO CERTAIN PARTS
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRET_KEY;
 
 const checkUserRole = (requiredRole) => {
-    return (req, res, next) => {
-      /*const userRole = req.user.userRole; 
-            if (userRole === requiredRole) {*/
-                console.log('userRole check');
-        next();
-      /*} else {
-         res.status(403).send('Access denied');
-      }*/
-    };
+  return (req, res, next) => {
+    
+    const token =req.cookies.jwt;
+    if (token) {
+        try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        const user = decoded;
+
+        if (user.userRole === requiredRole) {
+            next();
+        } else {
+            return res.status(403).send("Yetkili değilsiniz");
+        }
+        } catch (error) {
+        res.status(401).send('Unauthorized');
+        }
+    } else {
+        return res.status(401).redirect('/login');
+    }
+
   };
-  
+}
+
+
+
+
+
+
+
 module.exports = checkUserRole;

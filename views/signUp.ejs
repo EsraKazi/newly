@@ -1,0 +1,24 @@
+<%- include("../views/partials/header", {title:'Swandor'})-%>
+
+<%- include("../views/partials/navbar") %>
+<div><h2>Create New User</h2></div>
+
+<form action="/signUp" method="POST">
+  <fieldset>
+    <label>Kullanıcı Adı</label>
+    <input type ="text" id = 'username' name="username" required>
+    <br><br>
+    <label>Parola</label>
+    <input type="password" id = "password" name="password" required>
+    <br><br>
+    <label>User Role</label>
+    <select id="userRole" name="userRole">
+      <option value="callcenter">Call Center</option>
+      <option value="management">Management</option>
+      <option value="agency">Agency</option>
+    </select>
+    <button type ="submit">Kullanıcıyı Kaydet</button>
+  </fieldset>
+</form>
+
+<%- include("../views/partials/footer")-%>

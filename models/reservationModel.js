@@ -4,7 +4,7 @@ const reservationSchema = mongoose.Schema({
     requestType:{
         type:String,
         
-    }
+    },
     checkInDate: {
         type: Date,
         required: true
