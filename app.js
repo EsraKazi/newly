@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 app.use('/',authRouter);
-app.use('/reservations',reservationRouter);
+app.use('/reservation',reservationRouter);
 
 
 mongoose

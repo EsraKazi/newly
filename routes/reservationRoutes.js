@@ -7,7 +7,7 @@ const router = Router();
 
 router.get('/', getAllReservation);
 
-router.post('/', postNewReservation);
+router.post('/new', postNewReservation);
 router.put('/update', checkUserRole('management'), updateReservation);
 router.put('/delete', checkUserRole('management'), deleteReservation);
 

@@ -1,5 +1,5 @@
-<%- include("../views/partials/header", { title: 'Swandor' })-%>
-<section class="h-100 gradient-form d-flex justify-content-center align-items-center" style="background-color: #eee;">
+<%- include("../views/partials/header", { title: 'Swandor',name:'login'})-%>
+<section class="h-100 gradient-form" style="background-color: #eee;">
   <div class="container py-5">
     <div class="row">
       <div class="col-lg-6">
@@ -8,17 +8,17 @@
             <div class="text-center">
               <img src="https://play-lh.googleusercontent.com/FonfjGzxQphWL4Eql-cGsTs8GBjTJxJ4BlXRhW_mWouYbFIVET5BTI0rgBGH_x6ZRQ=w600-h300-pc0xffffff-pd"
                 alt="logo">
-              <h4 class="mt-1 mb-5 pb-1">Swandor Hotels & Resorts Topkapı Palace</h4>
+              <h4 class="mt-1 mb-5 pb-1">Employee Login</h4>
             </div>
-            <form action="/signUp" method="POST">
+            <form action="/login" method="POST"> <!-- Modified form action -->
               <div class="form-outline mb-4">
-                <input type="text" id="username" class="form-control" placeholder="Kullanıcı Adı" />
+                <input type="text" id="username" name="username" class="form-control" placeholder="Kullanıcı Adı" required /> <!-- Added name attribute and required -->
               </div>
               <div class="form-outline mb-4">
-                <input type="password" id="form2Example22" class="form-control" placeholder="Şifre" />
+                <input type="password" id="password" name="password" class="form-control" placeholder="Şifre" required /> <!-- Added name attribute and required -->
               </div>
               <div class="text-center pt-1 mb-5 pb-1">
-                <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Giriş Yap</button>
+                <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Giriş Yap</button>
               </div>
             </form>
           </div>

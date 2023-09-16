@@ -11,6 +11,9 @@
     
     @media (min-width: 768px) {
     .gradient-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100vh !important;
     }
     }

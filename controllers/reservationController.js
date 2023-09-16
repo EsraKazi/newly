@@ -3,7 +3,7 @@ const Reservation = require('../models/reservationModel')
 getAllReservation = ('/',async (req, res) => {
     try {
         var reservation = await Reservation.find();
-        res.render('home.ejs',{
+        res.render('reservationNew.ejs',{
             reservationData: reservation
         })
     } catch (error) {
