@@ -13,10 +13,10 @@ const checkUserRole = (requiredRole) => {
         if (user.userRole === requiredRole) {
             next();
         } else {
-            return res.status(403).send("Yetkili değilsiniz");
+            return res.status(403).render('error.ejs');
         }
         } catch (error) {
-        res.status(401).send('Unauthorized');
+          return res.status(403).render('error.ejs');
         }
     } else {
         return res.status(401).redirect('/login');

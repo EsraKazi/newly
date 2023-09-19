@@ -30,7 +30,7 @@ postLogin = async (req, res) => {
   
         res.cookie('jwt', token);
         
-        res.redirect('/signUp');
+        res.redirect('/');
     } catch (error) {
         console.error('Unable to login:', error);
         res.status(500).send('Unable to login');
@@ -57,9 +57,9 @@ postSignUp = async (req,res) =>{
 }
 };
 
-postLogout = ('/logout', (req, res) => {
+getLogout = ('/logout', (req, res) => {
     jwtToken.deleteToken(res);
-       res.redirect('/');
+       res.redirect('/login');
   });
   
 
@@ -68,6 +68,6 @@ module.exports = {
     postLogin,
     getSignUp,
     postSignUp,
-    postLogout
+    getLogout
 
 }
