@@ -21,21 +21,20 @@ const reservationSchema = mongoose.Schema({
         required: true
     },
     
-    agency: { // Kalanit, Pegas, Sava + MANUEL OTHER
+    agency: {
         type: String,
         required: true 
     },    
     
     addedBy: { 
-        type: mongoose.Schema.Types.ObjectId, // Use mongoose.Schema.Types.ObjectId
-        ref: 'User',
+        type: String,
         required: true
     },
 
     status: {
         type : String,
         required: true,
-        default : "pending"
+        default : "beklemede"
     }
 })
 

@@ -1,7 +1,7 @@
 /* Your existing styles */
 .gradient-custom-2 {
     /* fallback for old browsers */
-    background: #fccb90;
+    background:#b8a77a;
   
     /* Chrome 10-25, Safari 5.1-6 */
     background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);

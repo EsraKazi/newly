@@ -1,14 +1,13 @@
 const jwt = require('jsonwebtoken');
+const { decodeToken } = require('./jwtToken');
 const secretKey = process.env.SECRET_KEY;
 
 const checkUserRole = (requiredRole) => {
   return (req, res, next) => {
     
-    const token =req.cookies.jwt;
-    if (token) {
+    const user = decodeToken(req);
+    if (user) {
         try {
-        const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        const user = decoded;
 
         if (user.userRole === requiredRole) {
             next();

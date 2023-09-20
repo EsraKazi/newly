@@ -1,20 +1,27 @@
 const crypto = require('crypto');
-require('dotenv').config(); 
 const jwt = require('jsonwebtoken');
+require('dotenv').config(); 
 
+function decodeToken(req){
+    const token = req.cookies.jwt;
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const user = decoded;
 
+    return user;
+}
 
 process.env.SECRET_KEY = crypto.randomBytes(64).toString('hex');
 
 function generateToken(userData) {
-    return jwt.sign(userData, process.env.SECRET_KEY , { expiresIn: '1h' });
+    return jwt.sign(userData, process.env.SECRET_KEY, { expiresIn: '1h' });
 }
+
 function deleteToken(res){
     res.cookie('jwt', '', { expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
-
 }
 
 module.exports = {
     generateToken,
+    decodeToken,
     deleteToken
 };

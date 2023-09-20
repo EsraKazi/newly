@@ -1,14 +1,10 @@
 const {Router} = require('express');
 const checkUserRole = require('../middleware/requiredRole');
-const {  getAllReservation , postNewReservation }=require('../controllers/reservationController.js');
+const {  getAllReservation , postNewReservation, updateReservation }=require('../controllers/reservationController.js');
 const router = Router();
-
-//router.get('/signUp', checkUserRole('management'), getSignUp);
-
 router.get('/', getAllReservation);
 
-router.post('/new', checkUserRole('management'), postNewReservation);
-router.put('/update', checkUserRole('management'), updateReservation);
-router.put('/delete', checkUserRole('management'), deleteReservation);
+router.post('/new', postNewReservation);
+router.put('/update/:id', checkUserRole('management'), updateReservation);
 
 module.exports = router;
