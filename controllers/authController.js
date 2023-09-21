@@ -4,6 +4,7 @@ const jwtToken = require('../middleware/jwtToken');
 require("dotenv").config();
 
 getLogin = (req,res) =>{
+    jwtToken.deleteToken(res);
     res.render('login');
 }
 

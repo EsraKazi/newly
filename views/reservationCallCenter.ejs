@@ -9,7 +9,7 @@
         });
 
         // Show all reservations by default
-        $("input[name='type'][value='all']").prop("checked", true);
+        $("input[name='status'][value='all']").prop("checked", true);
         filterTable("all");
 
         // Function to filter the table rows
@@ -18,7 +18,7 @@
                 $("table tbody tr").show();
             } else {
                 $("table tbody tr").hide();
-                $("table tbody tr[data-type='" + value + "']").show();
+                $("table tbody tr[data-status='" + value + "']").show();
             }
         }
     });
@@ -35,16 +35,16 @@
                         <div class="col-sm-6">
                             <div class="btn-group" data-toggle="buttons">
                                 <label class="btn btn-info">
-                                    <input type="radio" name="type" value="all"> Tüm Rezervasyonlar
+                                    <input type="radio" name="status" value="all"> Tüm Rezervasyonlar
                                 </label>
                                 <label class="btn btn-info">
-                                    <input type="radio" name="type" value="new"> Yeni Rezervasyonlar
+                                    <input type="radio" name="status" value="Yeni"> Yeni Rezervasyonlar
                                 </label>
-                                <label class="btn btn-success">
-                                    <input type="radio" name="type" value="changes"> Rezervasyon Değişiklikleri
+                                <label class="btn btn-warning">
+                                    <input type="radio" name="status" value="Düzenleme"> Rezervasyon Değişiklikleri
                                 </label>
                                 <label class="btn btn-danger">
-                                    <input type="radio" name="type" value="cancel"> Rezervasyon İptalleri
+                                    <input type="radio" name="status" value="Red"> Rezervasyon İptalleri
                                 </label>
                             </div>
                         </div>
@@ -70,9 +70,9 @@
 						<label for="checkOutDate">Çıkış Tarihi:</label>
 						<input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required>
 					</div>
-					<div class="form-group mr-2">
+					<div class="form-group mb-4">
 						<label for="roomType">Oda Türü:</label>
-						<select id="roomType" name="roomType" class="form-control" required size="5">
+						<select id="roomType" name="roomType"  required>
 							<option value="DR">Deluxe Room</option>
 							<option value="DSR">Deluxe Superior Room</option>
 							<option value="DGFR">Deluxe Garden Family Room</option>
@@ -82,9 +82,9 @@
 							<!-- Diğer oda türleri buraya eklenebilir -->
 						</select>
 					</div>
-					<div class="form-group mr-2">
+					<div class="form-group mb-4">
 						<label for="agency">Acente:</label>
-						<select id="agency" name="agency" class="form-control" required size="5">
+						<select id="agency" name="agency" required>
 							<% agencies.forEach((agency) => { %>
 								<option value="<%= agency.name %>"><%= agency.name %></option>
 							<% }); %>
@@ -113,7 +113,7 @@
 								<td><%= reservation.checkInDate.toLocaleDateString('tr-TR') %></td>
 								<td><%= reservation.checkOutDate.toLocaleDateString('tr-TR') %></td>
                                 <td><%= reservation.roomType %></td> <!-- Assuming 'name' is the room type field -->
-                                <td><%= reservation.agencies %></td> <!-- Assuming 'name' is the agency name field -->
+                                <td><%= reservation.agency %></td> <!-- Assuming 'name' is the agency name field -->
                                 <td><%= reservation.addedBy%></td> <!-- Assuming 'username' is the user's username field -->
                                 <td><%= reservation.status %></td>
                             </tr>

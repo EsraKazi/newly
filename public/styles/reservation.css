@@ -7,8 +7,6 @@ body {
     margin: 30px 0;
 }
 .table-wrapper {
-    width: 100%; /* Ekranın tamamını kaplayacak şekilde */
-    height: 100vh; /* Ekranın yüksekliğini tam olarak kaplar */
     background: #fff;
 	margin: 0 auto;
     padding: 20px 30px 5px;
@@ -71,4 +69,36 @@ table.table td .btn.manage {
 }
 table.table td .btn.manage:hover {
     background: #2e9c81;		
+}
+/* Custom CSS for responsive radio buttons */
+.btn label {
+    display: block; /* Ensure labels are displayed as block elements */
+    text-align: justifdy; /* Align label text to the left */
+}
+
+.btn input[type="radio"] {
+    display: none; /* Hide the radio buttons themselves */
+}
+
+.btn.active {
+    background-color: #007bff; /* Style the active (selected) label */
+    color: #fff;
+}
+
+/* Style for the label text when active */
+.btn.active label {
+    font-weight: bold;
+}
+
+/* Optional styles to improve label appearance on small screens */
+@media (max-width: 768px) {
+    .btn label {
+        white-space: normal; /* Allow label text to wrap */
+        padding: 5px 10px; /* Add some padding for better touch interaction */
+        text-align: center; /* Center text on small screens */
+    }
+
+    .btn.btn-sm label {
+        font-size: 12px; /* Reduce font size for smaller screens */
+    }
 }

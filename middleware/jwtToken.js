@@ -14,10 +14,11 @@ function decodeToken(req){
     }
 }
 
-process.env.SECRET_KEY = crypto.randomBytes(64).toString('hex');
 
 function generateToken(userData) {
-    return jwt.sign(userData, process.env.SECRET_KEY, { expiresIn: '1h' });
+    
+process.env.SECRET_KEY = crypto.randomBytes(64).toString('hex');
+    return jwt.sign(userData, process.env.SECRET_KEY, { expiresIn: '1d' });
 }
 
 function deleteToken(res){

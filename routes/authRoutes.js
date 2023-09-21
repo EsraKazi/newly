@@ -3,6 +3,7 @@ const checkUserRole = require('../middleware/requiredRole');
 const { getLogin, postLogin, getSignUp, postSignUp, getLogout } = require('../controllers/authController');
 const router = Router();
 
+
 router.get('/login', getLogin);
 router.post('/login', postLogin);
 
