@@ -7,6 +7,6 @@ const router = Router();
 router.get('/', checkUserRole(['callcenter', 'management']), getAllReservation);
 
 router.post('/new', postNewReservation);
-router.put('/update/:id', checkUserRole(['callcenter', 'management']), updateReservation);
+router.post('/update/:id', updateReservation);
 
 module.exports = router;

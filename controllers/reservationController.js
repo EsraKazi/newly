@@ -34,7 +34,7 @@ getAllReservation = ('/', async (req, res) => {
     const user = jwtToken.decodeToken(req);
     try {
       const reservation = new Reservation({
-        requestType: req.body.requestType,
+        //requestType: req.body.requestType,
         checkInDate: req.body.checkInDate,
         checkOutDate: req.body.checkOutDate,
         roomType: req.body.roomType,
@@ -50,25 +50,28 @@ getAllReservation = ('/', async (req, res) => {
     }
   };
   
-  updateReservation = async (req, res) => {
+  updateReservation = async (req, res)  => {
+    const reservationId = req.params.id;
+    const newStatus = req.body.status;
+
     try {
-      const { id } = req.params;
-      const { newStatus } = req.body;
-      const reservation = await Reservation.findById(id);
-  
-      if (!reservation) {
-        return res.status(404).send('Rezervasyon bulunamadı');
-      }
-  
-      reservation.status = newStatus;
-      await reservation.save();
-      res.redirect('/');
+        const updatedReservation = await Reservation.findByIdAndUpdate(
+            reservationId,
+            { status: newStatus }
+        );
+
+        if (!updatedReservation) {
+            return res.status(404).send('Reservation not found');
+        }
+
+        // Redirect back to the reservations page
+        res.redirect('/');
     } catch (error) {
-      console.error('Rezervasyon güncellenirken hata:', error);
-      res.status(500).send('Rezervasyon güncellenirken hata oluştu');
+        console.error(error);
+        res.status(500).send('An error occurred while updating the reservation');
     }
-  };
-  
+};
+
   module.exports = {
     getAllReservation,
     postNewReservation,

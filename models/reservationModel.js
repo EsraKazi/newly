@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const reservationSchema = mongoose.Schema({
     requestType:{
         type:String,
-        required : true
+        required : false
     },
 
     checkInDate: {
