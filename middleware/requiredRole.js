@@ -1,33 +1,28 @@
 const jwt = require('jsonwebtoken');
-const { decodeToken } = require('./jwtToken');
-const secretKey = process.env.SECRET_KEY;
+const { decodeToken } = require('./jwtToken'); // Ensure decodeToken is correctly defined
 
-const checkUserRole = (requiredRole) => {
+const checkUserManagement = (requiredRoles) => {
   return (req, res, next) => {
-    
     const user = decodeToken(req);
     if (user) {
-        try {
-
-        if (user.userRole === requiredRole) {
-            next();
+      try {
+        // Check if the user's role matches any of the required roles
+        if (requiredRoles.includes(user.userRole)) {
+          next();
         } else {
-            return res.status(403).render('error.ejs');
-        }
-        } catch (error) {
-          return res.status(403).render('error.ejs');
-        }
-    } else {
-        return res.status(401).redirect('/login');
-    }
+          // Redirect to the error page if the user doesn't have the required role(s)
 
+          return res.render('error.ejs');
+        }
+      } catch (error) {
+        // Redirect to the error page if an error occurs
+        return res.render('error.ejs');
+      }
+    } else {
+      // Redirect to the login page if the user is not authenticated
+      return res.redirect('/login');
+    }
   };
 }
 
-
-
-
-
-
-
-module.exports = checkUserRole;
+module.exports = checkUserManagement;

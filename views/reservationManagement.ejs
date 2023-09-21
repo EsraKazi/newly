@@ -2,31 +2,30 @@
 
 <script>
     $(document).ready(function () {
-        $(".btn-group .btn").click(function () {
-            var inputValue = $(this).find("input").val();
-            if (inputValue != 'all') {
-                var target = $('table tr[data-status="' + inputValue + '"]');
-                $("table tbody tr").not(target).hide();
-                target.fadeIn();
-            } else {
-                $("table tbody tr").fadeIn();
-            }
+        // Handle radio button change event
+        $("input[type='radio']").change(function () {
+            var inputValue = $(this).val();
+            filterTable(inputValue);
         });
-        // Bootstrap 4'ü desteklemek için status etiketinin sınıfını değiştirme
-        var bs = $.fn.tooltip.Constructor.VERSION;
-        var str = bs.split(".");
-        if (str[0] == 4) {
-            $(".label").each(function () {
-                var classStr = $(this).attr("class");
-                var newClassStr = classStr.replace(/label/g, "badge");
-                $(this).removeAttr("class").addClass(newClassStr);
-            });
+
+        // Show all reservations by default
+        $("input[name='status'][value='all']").prop("checked", true);
+        filterTable("all");
+
+        // Function to filter the table rows
+        function filterTable(value) {
+            if (value == 'all') {
+                $("table tbody tr").show();
+            } else {
+                $("table tbody tr").hide();
+                $("table tbody tr[data-status='" + value + "']").show();
+            }
         }
     });
 </script>
 </head>
 <body>
-    <%- include("../views/partials/navbar", { userRole: 'management' })-%>
+    <%- include("../views/partials/navbarManagement")-%>
     <div class="container-xl">
         <div class="table-responsive">
             <div class="table-wrapper">
@@ -35,22 +34,25 @@
                         <div class="col-sm-6"><h2>Rezervasyonlar</h2></div>
                         <div class="col-sm-6">
                             <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-info active">
-                                    <input type="radio" name="status" value="all" checked="checked"> Tüm istekler
+                                <label class="btn btn-info">
+                                    <input type="radio" name="status" value="all"> Tüm Rezervasyonlar
+                                </label>
+                                <label class="btn btn-info">
+                                    <input type="radio" name="status" value="new"> Yeni Rezervasyonlar
                                 </label>
                                 <label class="btn btn-success">
-                                    <input type="radio" name="status" value="onay"> Onaylandı
-                                </label>
-                                <label class="btn btn-warning">
-                                    <input type="radio" name="status" value="revise"> Düzenlenmeli!
+                                    <input type="radio" name="status" value="changes"> Rezervasyon Değişiklikleri
                                 </label>
                                 <label class="btn btn-danger">
-                                    <input type="radio" name="status" value="red"> Reddedildi
+                                    <input type="radio" name="status" value="cancel"> Rezervasyon İptalleri
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+                
 				<form action="/new" method="POST" class="form-inline">
 					<div class="form-group mr-2">
 						<label for="requestType">İstek Türü:</label>
@@ -105,8 +107,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% reservationData.forEach((reservation) => { %>
-                            <tr>
+                        <% reservationData.reverse().forEach((reservation) => { %>
+                            <tr data-status="<%= reservation.requestType %>">
                                 <td><%= reservation.requestType %></td>
 								<td><%= reservation.checkInDate.toLocaleDateString('tr-TR') %></td>
 								<td><%= reservation.checkOutDate.toLocaleDateString('tr-TR') %></td>

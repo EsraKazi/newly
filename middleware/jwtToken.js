@@ -3,11 +3,15 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config(); 
 
 function decodeToken(req){
-    const token = req.cookies.jwt;
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    const user = decoded;
-
-    return user;
+    try {
+        const token = req.cookies.jwt;
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        const user = decoded;
+        return user;
+    } catch (error) {
+        console.error('Token decoding error:', error);
+        return '/login'; // Return the '/login' URL in case of an error
+    }
 }
 
 process.env.SECRET_KEY = crypto.randomBytes(64).toString('hex');
