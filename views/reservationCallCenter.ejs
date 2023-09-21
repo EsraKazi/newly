@@ -35,9 +35,6 @@
                         <div class="col-sm-6">
                             <div class="btn-group" data-toggle="buttons">
                                 <label class="btn btn-info">
-                                    <input type="radio" name="status" value="all"> Tüm Rezervasyonlar
-                                </label>
-                                <label class="btn btn-info">
                                     <input type="radio" name="status" value="beklemede"> Bekleyen
                                 </label>
                                 <label class="btn btn-warning">
@@ -99,6 +96,7 @@
                     </thead>
                     <tbody>
                         <% reservationData.reverse().forEach((reservation) => { %>
+                            <tr data-status="<%= reservation.status %>">
 								<td><%= reservation.checkInDate.toLocaleDateString('tr-TR') %></td>
 								<td><%= reservation.checkOutDate.toLocaleDateString('tr-TR') %></td>
                                 <td><%= reservation.roomType %></td> <!-- Assuming 'name' is the room type field -->
