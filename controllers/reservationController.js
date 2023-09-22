@@ -45,8 +45,7 @@ getAllReservation = ('/', async (req, res) => {
       await reservation.save();
       res.redirect('/');
     } catch (error) {
-      console.error('Rezervasyon oluşturulurken hata:', error);
-      res.status(500).send('Rezervasyon oluşturulurken hata oluştu');
+      res.render('error.ejs')
     }
   };
   
