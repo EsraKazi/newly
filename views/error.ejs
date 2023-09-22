@@ -1,47 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error Page</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-
-        .error-image {
-            max-width: 300px;
-            margin-bottom: 20px;
-        }
-
-        .error-message {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .login-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
-    <img src="styles\SwandorTopkapiPalaceLogoSquare.jpg" alt="Error Image" class="error-image">
-    <div class="error-message">
-        Oops! Something went wrong.
+<%- include("../views/partials/header", { title: 'Swandor', name: 'login' }) %>
+<section class="h-100 gradient-form" style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        <div class="card rounded-3 text-black">
+          <div class="card-body p-md-5 mx-md-4">
+            <div class="text-center">
+              <!-- Center the image -->
+              <img src="styles\SwandorTopkapiPalaceLogoSquare.jpg" className="mx-auto" />              <h4 class="mt-1 mb-5 pb-1">Employee Login</h4>
+            </div>
+            <form action="/login" method="POST">
+              <div class="form-outline mb-4">
+                <input type="text" id="username" name="username" class="form-control"  autocomplete="off" placeholder="Kullanıcı Adı" required />
+              </div>
+              <div class="form-outline mb-4">
+                <input type="password" id="password" name="password" class="form-control"  autocomplete="off" placeholder="Şifre" required />
+              </div>
+              <div class="text-center pt-1 mb-5 pb-1">
+                <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Giriş Yap</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-    <a href="/login" class="login-button">Go to Login</a>
-</body>
-</html>
+  </div>
+</section>
+<%- include("../views/partials/footer") %>
