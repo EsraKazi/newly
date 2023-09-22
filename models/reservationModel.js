@@ -33,8 +33,14 @@ const reservationSchema = mongoose.Schema({
 
     status: {
         type : String,
-        required: true,
-        default : "beklemede"
+        default : "beklemede",
+        required: true
+    },
+
+    creationDate: {
+        type: Date,
+        default : Date.now,
+        required: true
     }
 })
 
