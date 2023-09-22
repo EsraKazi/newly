@@ -54,7 +54,6 @@
                             <th>Check Out Tarihi</th>
                             <th>Oda Türü</th>
                             <th>Acente</th>
-                            <th>Ekleyen</th>
                             <th>Durum</th>
                         </tr>
                     </thead>
@@ -65,7 +64,6 @@
 								<td><%= reservation.checkOutDate.toLocaleDateString('tr-TR') %></td>
                                 <td><%= reservation.roomType %></td> <!-- Assuming 'name' is the room type field -->
                                 <td><%= reservation.agency %></td> <!-- Assuming 'name' is the agency name field -->
-                                <td><%= reservation.addedBy%></td> <!-- Assuming 'username' is the user's username field -->
                                 <td><%= reservation.status %></td>
                                 <td>
                                     <form action="/update/<%= reservation._id %>" method="POST">
