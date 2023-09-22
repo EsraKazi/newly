@@ -3,40 +3,38 @@ const mongoose = require("mongoose");
 const reservationSchema = mongoose.Schema({
     requestType:{
         type:String,
-        
-    }
+        required : false
+    },
+
     checkInDate: {
         type: Date,
         required: true
-        // Add min and max if needed
     },    
+
     checkOutDate: {
         type: Date,
         required: true
-        // Add min and max if needed
     }, 
+
     roomType: { 
-        type: mongoose.Schema.Types.ObjectId, // Use mongoose.Schema.Types.ObjectId
-        ref: 'Room',
+        type: String,
         required: true
     },
     
-    agency: { // Kalanit, Pegas, Sava + MANUEL OTHER
-        type: mongoose.Schema.Types.ObjectId, // Use mongoose.Schema.Types.ObjectId
-        ref: 'Agency',
-        required: true
+    agency: {
+        type: String,
+        required: true 
     },    
     
     addedBy: { 
-        type: mongoose.Schema.Types.ObjectId, // Use mongoose.Schema.Types.ObjectId
-        ref: 'User',
+        type: String,
         required: true
     },
 
     status: {
         type : String,
         required: true,
-        default : "pending"
+        default : "beklemede"
     }
 })
 

@@ -1,39 +1,35 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwtToken = require('../middleware/jwtToken');
-const checkUserRole = require('../middleware/requiredRole');
 require("dotenv").config();
 
 getLogin = (req,res) =>{
+    jwtToken.deleteToken(res);
     res.render('login');
 }
 
 
 postLogin = async (req, res) => {
-    
-    console.log('postLogin');
     try {
-        console.log('try');
         const { username, password } = req.body;
-        console.log(username);
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ username});
 
         if (!user) {
             console.log("user not found");
-            return res.redirect('/');
+            return res.redirect('/login');
         }
-
+        const userRole = user.userRole;
         const matched = await bcrypt.compare(password, user.password);
         if (!matched) {
             console.log("password no match");
-            return res.redirect('/');
+            return res.redirect('/login');
         }
-
-        console.log('cookie');
-        const token = jwtToken.generateToken({username,password});
+        const token = jwtToken.generateToken({
+            username,
+            userRole
+        });
   
         res.cookie('jwt', token);
-        console.log('logged in');
         
         res.redirect('/');
     } catch (error) {
@@ -42,12 +38,12 @@ postLogin = async (req, res) => {
     }
 };
 
-getSignUp = ('/signUp', checkUserRole('Mng'),(req, res) => {
-    res.render('login');
-});
+getSignUp = (req, res) => {
+    res.render('signUp');
+};
 
 
-postSignUp = ('/signUp',  checkUserRole('Mng'),async (req,res) =>{
+postSignUp = async (req,res) =>{
 
     try {
     const hashedPassword = await bcrypt.hash(req.body.password,await bcrypt.genSalt());
@@ -56,18 +52,15 @@ postSignUp = ('/signUp',  checkUserRole('Mng'),async (req,res) =>{
         password : hashedPassword,
         userRole : req.body.userRole
     })).save();
-    return res.redirect('/');
+    return res.redirect('/signUp');
+} catch (error) {
+    console.error('Error:', error);
 }
-    catch(err){
-        console.log('Error.')
-    }
-    
+};
 
-});
-
-postLogout = ('/logout', (req, res) => {
-    res.cookie('jwt', '', { expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
-    res.redirect('/');
+getLogout = ('/logout', (req, res) => {
+    jwtToken.deleteToken(res);
+       res.redirect('/login');
   });
   
 
@@ -76,6 +69,6 @@ module.exports = {
     postLogin,
     getSignUp,
     postSignUp,
-    postLogout
+    getLogout
 
 }

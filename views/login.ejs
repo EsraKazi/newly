@@ -1,20 +1,29 @@
-<header>
-    <%- include("../views/partials/header", {title:'Swandor'})-%>
-</header>
-<body>
-    <form action="/login" method="POST">
-      <fieldset>
-        <label>Kullanıcı Adı</label>
-        <input type ="text" id = 'username' name="username" required>
-        <br><br>
-        <label>Parola</label>
-        <input type="password" id = "password" name="password" required>
-        <br><br>
-        <button type ="submit">Giriş Yap!</button>
-      </fieldset>
-    </form>
-</body>
-<footer >
-    <%- include("../views/partials/footer")-%>
-</footer>
-</html>
+<%- include("../views/partials/header", { title: 'Swandor', name: 'login' }) %>
+<section class="h-100 gradient-form" style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-6 mx-auto">
+        <div class="card rounded-3 text-black">
+          <div class="card-body p-md-5 mx-md-4">
+            <div class="text-center">
+              <!-- Center the image -->
+              <img src="styles\SwandorTopkapiPalaceLogoSquare.jpg" className="mx-auto" />              <h4 class="mt-1 mb-5 pb-1">Employee Login</h4>
+            </div>
+            <form action="/login" method="POST">
+              <div class="form-outline mb-4">
+                <input type="text" id="username" name="username" class="form-control"  autocomplete="off" placeholder="Kullanıcı Adı" required />
+              </div>
+              <div class="form-outline mb-4">
+                <input type="password" id="password" name="password" class="form-control"  autocomplete="off" placeholder="Şifre" required />
+              </div>
+              <div class="text-center pt-1 mb-5 pb-1">
+                <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Giriş Yap</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include("../views/partials/footer") %>
