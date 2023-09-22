@@ -21,6 +21,42 @@
                 $("table tbody tr[data-status='" + value + "']").show();
             }
         }
+                // Disable past dates for Check In
+                var today = new Date().toISOString().split('T')[0];
+        $("#checkInDate").attr("min", today);
+
+        // Add event listener for Check In change
+        $("#checkInDate").on("change", function () {
+            var checkInDate = new Date($(this).val());
+            var checkOutDate = new Date($("#checkOutDate").val());
+
+            // If Check Out date is earlier than Check In date, reset Check Out date
+            if (checkOutDate < checkInDate) {
+                $("#checkOutDate").val($(this).val());
+            }
+
+            // Set minimum for Check Out date
+            $("#checkOutDate").attr("min", $(this).val());
+        });
+
+        // Disable past dates for Check Out
+        $("#checkOutDate").attr("min", today);
+        
+        $("table tbody tr").each(function () {
+            var status = $(this).data("status");
+
+            // Remove existing row color classes
+            $(this).removeClass("row-status-beklemede row-status-onaylandi row-status-reddedildi");
+
+            // Add row color class based on status
+            if (status === 'beklemede') {
+                $(this).addClass("row-status-beklemede");
+            } else if (status === 'onaylandi') {
+                $(this).addClass("row-status-onaylandi");
+            } else if (status === 'reddedildi') {
+                $(this).addClass("row-status-reddedildi");
+            }
+        });
     });
 </script>
 </head>

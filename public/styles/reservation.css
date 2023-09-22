@@ -102,3 +102,14 @@ table.table td .btn.manage:hover {
         font-size: 12px; /* Reduce font size for smaller screens */
     }
 }
+.row-status-beklemede {
+    background-color: #83827d; /* gray background for "Bekleyen" */
+}
+
+.row-status-onaylandi {
+    background-color: #c1f7d5; /* Green background for "Onaylanan" */
+}
+
+.row-status-reddedildi {
+    background-color: #ffcccc; /* Red background for "Reddedilen" */
+}
