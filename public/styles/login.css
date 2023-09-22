@@ -1,45 +1,36 @@
-/* Your existing styles */
 .gradient-custom-2 {
-    /* fallback for old browsers */
-    background:#b8a77a;
-  
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
-  
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
-  }
-  
-  @media (min-width: 768px) {
-    .gradient-form {
+  background: #b8a77a;
+  background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+  background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+}
+
+@media (min-width: 768px) {
+  .gradient-form {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh !important;
-    }
   }
-  
-  @media (min-width: 769px) {
-    .gradient-custom-2 {
+}
+
+@media (min-width: 769px) {
+  .gradient-custom-2 {
       border-top-right-radius: .3rem;
       border-bottom-right-radius: .3rem;
-    }
   }
-  
-  /* Additional styles to center the image */
-  .text-center {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 100%;
-  }
-  
-  /* Center the image within the text-center div */
-  .text-center img {
-    max-width: 100%;
-    height: auto;
-    margin: 0 auto;
-  }
-  
+}
+
+.text-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
+.text-center img {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}

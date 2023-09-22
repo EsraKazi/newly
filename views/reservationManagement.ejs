@@ -2,17 +2,15 @@
 
 <script>
     $(document).ready(function () {
-        // Handle radio button change event
         $("input[type='radio']").change(function () {
             var inputValue = $(this).val();
             filterTable(inputValue);
         });
 
-        // Show all reservations by default
-        $("input[name='status'][value='all']").prop("checked", true);
-        filterTable("all");
+        $("input[name='status'][value='beklemede']").prop("checked", true);
+        filterTable("beklemede");
 
-        // Function to filter the table rows
+
         function filterTable(value) {
             if (value == 'all') {
                 $("table tbody tr").show();
@@ -21,13 +19,29 @@
                 $("table tbody tr[data-status='" + value + "']").show();
             }
         }
+
+        // Add this code to change row colors based on data-status
+        $("table tbody tr").each(function () {
+            var status = $(this).attr("data-status");
+            switch (status) {
+                case "onaylandi":
+                    $(this).addClass("table-success");
+                    break;
+                case "reddedildi":
+                    $(this).addClass("table-danger");
+                    break;
+                case "beklemede":
+                    $(this).addClass("table-light");
+                    break;
+                // Add more cases if needed
+            }
+        });
     });
 </script>
 </head>
 <body>
     <%- include("../views/partials/navbarManagement")-%>
     <div class="container-xl">
-        <div class="table-responsive">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6"><h2>Rezervasyonlar</h2></div>
@@ -36,7 +50,7 @@
                             <label class="btn btn-info">
                                 <input type="radio" name="status" value="beklemede" checked> Bekleyen
                             </label>
-                            <label class="btn btn-warning">
+                            <label class="btn btn-success">
                                 <input type="radio" name="status" value="onaylandi"> Onaylanan
                             </label>
                             <label class="btn btn-danger">
@@ -46,41 +60,39 @@
                     </div>
                 </div>
             </div>
-
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Check In Tarihi</th>
-                            <th>Check Out Tarihi</th>
-                            <th>Oda Türü</th>
-                            <th>Acente</th>
-                            <th>Durum</th>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Check In Tarihi</th>
+                        <th>Check Out Tarihi</th>
+                        <th>Oda Türü</th>
+                        <th>Acente</th>
+                        <th>Durum</th>
+                        <th>Düzenle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% reservationData.reverse().forEach((reservation) => { %>
+                        <tr data-status="<%= reservation.status %>">
+                            <td><%= reservation.checkInDate.toLocaleDateString('tr-TR') %></td>
+                            <td><%= reservation.checkOutDate.toLocaleDateString('tr-TR') %></td>
+                            <td><%= reservation.roomType %></td>
+                            <td><%= reservation.agency %></td>
+                            <td><%= reservation.status %></td>
+                            <td style="width: 1%;">
+                                <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
+                                    <input type="hidden" name="status" value="onaylandi">
+                                    <button type="submit" class="btn btn-success">Onayla</button>
+                                </form>
+                                <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
+                                    <input type="hidden" name="status" value="reddedildi">
+                                    <button type="submit" class="btn btn-danger">Reddet</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <% reservationData.reverse().forEach((reservation) => { %>
-                            <tr data-status="<%= reservation.status %>">
-								<td><%= reservation.checkInDate.toLocaleDateString('tr-TR') %></td>
-								<td><%= reservation.checkOutDate.toLocaleDateString('tr-TR') %></td>
-                                <td><%= reservation.roomType %></td> <!-- Assuming 'name' is the room type field -->
-                                <td><%= reservation.agency %></td> <!-- Assuming 'name' is the agency name field -->
-                                <td><%= reservation.status %></td>
-                                <td>
-                                    <form action="/update/<%= reservation._id %>" method="POST">
-                                        <input type="hidden" name="status" value="onaylandi">
-                                        <button type="submit" class="btn btn-success">Onayla</button>
-                                    </form>
-                                    <form action="/update/<%= reservation._id %>" method="POST">
-                                        <input type="hidden" name="status" value="reddedildi">
-                                        <button type="submit" class="btn btn-danger">Reddet</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                    <% }); %>
+                </tbody>
+            </table>
     </div>
 </body>
 </html>
