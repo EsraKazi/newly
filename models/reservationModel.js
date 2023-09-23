@@ -36,12 +36,13 @@ const reservationSchema = mongoose.Schema({
         default : "beklemede",
         required: true
     },
-
-    creationDate: {
-        type: Date,
-        default : Date.now,
-        required: true
-    }
-})
+    confirmed: {
+        type: Boolean
+      },
+      
+    confirmationDeadline: {
+        type: Date
+      }
+});
 
 module.exports = mongoose.model('Reservation', reservationSchema);

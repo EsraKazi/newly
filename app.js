@@ -18,6 +18,8 @@ app.set('view engine', 'ejs');
 app.use('/',authRouter);
 app.use('/',reservationRouter);
 
+require('./middleware/setInterval');
+
 
 mongoose
   .connect(`${process.env.DB_CONNECT}`)
