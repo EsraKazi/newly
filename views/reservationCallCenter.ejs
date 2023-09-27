@@ -33,6 +33,7 @@
         });
         // Disable past dates for Check Out
         $("#checkOutDate").attr("min", today);
+        
 
         // Add this code to change row colors based on data-status
         $("table tbody tr").each(function () {
@@ -59,9 +60,7 @@
         function updateMaxHeight() {
             const table = tableContainer.querySelector('table');
             const tableHeight = table.getBoundingClientRect().height;
-            console.log(tableHeight);
-            const maxHeight = Math.min(600, tableHeight); // Set a maximum height of 400px
-            console.log(maxHeight);
+            const maxHeight = Math.min(600, tableHeight);
             tableContainer.style.maxHeight = maxHeight + 'px';
 
         }
@@ -137,8 +136,7 @@
                         <thead>
                             <tr>
                                 <th>Rezervasyon ID</th>
-                                <th>Check In Tarihi</th>
-                                <th>Check Out Tarihi</th>
+                                <th>Check In / Check Out</th>
                                 <th>Otel</th>
                                 <th>Oda Türü</th>
                                 <th>Acente</th>
@@ -150,8 +148,7 @@
                             <% reservationData.reverse().forEach((reservation) => { %>
                                 <tr data-status="<%= reservation.status %>">
                                     <td><%= reservation.reservationId %></td>
-                                    <td><%= reservation.checkInDate.toLocaleDateString('tr-TR') %></td>
-                                    <td><%= reservation.checkOutDate.toLocaleDateString('tr-TR') %></td>
+                                    <td><%= reservation.checkInDate.toLocaleDateString('tr-TR',{ day : 'numeric', month: 'numeric' }) %> - <%= reservation.checkOutDate.toLocaleDateString('tr-TR', { day : 'numeric', month: 'numeric'}) %></td>
                                     <td><%= reservation.hotel %></td>
                                     <td><%= reservation.roomType %></td>
                                     <td><%= reservation.agency %></td>
