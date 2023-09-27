@@ -36,6 +36,19 @@
                 // Add more cases if needed
             }
         });
+        const tableContainer = document.getElementById('table-container');
+
+        // Function to update the max-height based on the content
+        function updateMaxHeight() {
+            const table = tableContainer.querySelector('table');
+            const tableHeight = table.getBoundingClientRect().height;
+            const maxHeight = Math.min(600, tableHeight);
+            tableContainer.style.maxHeight = maxHeight + 'px';
+
+        }
+
+        // Call the function initially and whenever the table content changes
+        updateMaxHeight();
     });
 </script>
 </head>
@@ -60,40 +73,43 @@
                     </div>
                 </div>
             </div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Reservasyon ID'si</th>
-                        <th>Check In Tarihi</th>
-                        <th>Check Out Tarihi</th>
-                        <th>Oda Türü</th>
-                        <th>Acente</th>
-                        <th>Durum</th>
-                        <th>Düzenle</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% reservationData.reverse().forEach((reservation) => { %>
-                        <tr data-status="<%= reservation.status %>">
-                            <td><%= reservation.checkInDate.toLocaleDateString('tr-TR') %></td>
-                            <td><%= reservation.checkOutDate.toLocaleDateString('tr-TR') %></td>
-                            <td><%= reservation.roomType %></td>
-                            <td><%= reservation.agency %></td>
-                            <td><%= reservation.status %></td>
-                            <td style="width: 1%;">
-                                <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
-                                    <input type="hidden" name="status" value="onaylandi">
-                                    <button type="submit" class="btn btn-success">Onayla</button>
-                                </form>
-                                <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
-                                    <input type="hidden" name="status" value="reddedildi">
-                                    <button type="submit" class="btn btn-danger">Reddet</button>
-                                </form>
-                            </td>
+            <div id="table-container" style="overflow-x: auto;">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Reservasyon ID'si</th>
+                            <th>Check In / Check Out</th>
+                            <th>Otel</th>
+                            <th>Oda Türü</th>
+                            <th>Açıklama</th>
+                            <th>Durum</th>
+                            <th>Düzenle</th>
                         </tr>
-                    <% }); %>
-                </tbody>
+                    </thead>
+                    <tbody>
+                        <% reservationData.reverse().forEach((reservation) => { %>
+                            <tr data-status="<%= reservation.status %>">
+                                <td><%= reservation.reservationId %></td>
+                                <td><%= reservation.checkInDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %> - <%= reservation.checkOutDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %></td>
+                                <td><%= reservation.hotel %></td>
+                                <td><%= reservation.roomType %></td>
+                                <td><%= reservation.description %></td>
+                                <td><%= reservation.status %></td>
+                                <td style="width: 1%;">
+                                    <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
+                                        <input type="hidden" name="status" value="onaylandi">
+                                        <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Onayla"><i class="fas fa-check"></i></button>
+                                    </form>
+                                    <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
+                                        <input type="hidden" name="status" value="reddedildi">
+                                        <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Reddet"><i class="fas fa-times"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
             </table>
+        </div>
     </div>
 </body>
 </html>
