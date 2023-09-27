@@ -148,7 +148,7 @@
                             <% reservationData.reverse().forEach((reservation) => { %>
                                 <tr data-status="<%= reservation.status %>">
                                     <td><%= reservation.reservationId %></td>
-                                    <td><%= reservation.checkInDate.toLocaleDateString('tr-TR',{ day : 'numeric', month: 'numeric' }) %> - <%= reservation.checkOutDate.toLocaleDateString('tr-TR', { day : 'numeric', month: 'numeric'}) %></td>
+                                    <td><%= reservation.checkInDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %> - <%= reservation.checkOutDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %></td>
                                     <td><%= reservation.hotel %></td>
                                     <td><%= reservation.roomType %></td>
                                     <td><%= reservation.agency %></td>
