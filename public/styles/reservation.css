@@ -51,7 +51,7 @@ table.table {
 }
 table.table thead th,
 table.table tbody td {
-    width: 2%; /* Başlık hücrelerinin eşit genişlikte olması için her biri %20 genişlikte */
+    width: 2%; 
 }
 
 table.table tr th,
@@ -105,3 +105,14 @@ table.table td .btn.manage:hover {
         font-size: 10px; /* Reduce font size to make the buttons smaller */
     }
 }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #b8a77a;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
