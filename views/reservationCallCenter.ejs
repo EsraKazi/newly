@@ -68,9 +68,9 @@
 
 
         const hotelDropdown = document.getElementById('hotel');
-        const roomDropdown = document.getElementById('roomName');
        
         hotelDropdown.addEventListener('change', () => {
+        const roomDropdown = document.getElementById('roomName');
             roomDropdown.innerHTML = '<option value="" disabled selected>Oda Tipi</option>';
 
             const hotelName = hotelDropdown.value;
