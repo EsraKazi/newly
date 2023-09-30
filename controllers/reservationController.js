@@ -8,7 +8,9 @@ require("dotenv").config();
 let autoIncrement = 1;
 
 getAllReservation = ('/', async (req, res) => {
+
   const user = jwtToken.decodeToken(req);
+
   try {
     const userRole = user.userRole;
     const reservation = await Reservation.find();
@@ -16,9 +18,7 @@ getAllReservation = ('/', async (req, res) => {
     const hotels = await Hotel.find();
 
     hotels.forEach((hotel) => {
-      console.log(`Hotel Name: ${hotel.name}`);
-      hotel.rooms.forEach((rooms, index) => {
-        console.log(`Room ${index + 1}: ${rooms.roomName}`);
+      hotel.rooms.forEach((rooms) => {
       });
     });
     
@@ -26,27 +26,45 @@ getAllReservation = ('/', async (req, res) => {
       res.render('reservationCallCenter.ejs', {
         reservationData: reservation,
         agencies: agency,
-        hotels : hotels
+        hotels : hotels,
       });
     } else if (userRole === 'management') {
       res.render('reservationManagement.ejs', {
         reservationData: reservation,
         agencies: agency,
+        hotels : hotels,
       });
     } else {
       res.status(403).render('error.ejs');
     }
   } catch (error) {
-    console.error(error);
     res.redirect('/');
   }
 });
+
+
+getHotelRooms = async (req, res) => {
+  try {
+    const hotelName = req.params.hotelName;
+
+    const hotel = await Hotel.findOne({ name: hotelName });
+    const roomNames = hotel.rooms.map((room) => room.roomName);
+    res.json(roomNames);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 postNewReservation = async (req, res) => {
   const user = jwtToken.decodeToken(req);
 
   try {
     const hotel = req.body.hotel;
+    const room = req.body.roomName;
 
+    //ID oluştruma
+    //#############################################################################
     const lastReservation = await Reservation.findOne({})
     .sort({ reservationId: -1 })
     .exec();
@@ -67,17 +85,18 @@ postNewReservation = async (req, res) => {
 
     const currentDate = moment().format('YYMMDD');
     const hotelPrefix = hotel.substring(0, 2).toUpperCase();
-
     const autoIncrementValue = autoIncrement.toString().padStart(3, '0');
 
     const reservationId = `${currentDate}${hotelPrefix}${autoIncrementValue}`;
-
+    
+    //#############################################################################
+    
     const reservation = new Reservation({
       reservationId: reservationId,
       checkInDate: req.body.checkInDate,
       checkOutDate: req.body.checkOutDate,
-      roomType: req.body.roomType,
-      hotel: req.body.hotel,
+      hotel: hotel,
+      roomType: room,
       agency: req.body.agency,
       addedBy: user.username,
       description: req.body.description,
@@ -122,41 +141,9 @@ updateReservation = async (req, res)  => {
 
     res.redirect('/');
   } catch (error) {
-    console.error(error);
     res.status(500).send('An error occurred while updating the reservation');
   }
 };  
-
-updateReservationCallCenter = async (req, res)  => {
-  const user = jwtToken.decodeToken(req);
-
-  const reservationId = req.params.id;
-  console.log("this is call center reservation update!");
-  try {
-    const updatedReservation = await Reservation.findByIdAndUpdate( 
-      reservationId,
-     {
-        checkInDate: req.body.checkInDate,
-        checkOutDate: req.body.checkOutDate,
-        roomType: req.body.roomType,
-        agency: req.body.agency,
-        addedBy: user.username,
-        description: req.body.description,
-        confirmed: false, 
-        confirmationDeadline: null, 
-    }    );
-
-    if (!updatedReservation) {
-      return res.status(404).send('Reservation not found');
-    }
-    await updatedReservation.save();
-
-    res.redirect('/');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('An error occurred while updating the reservation');
-  }
-};
 
 deleteReservation =  async (req, res) => {
   try {
@@ -166,18 +153,17 @@ deleteReservation =  async (req, res) => {
       reservationId
     );
 
-    return res.status(200).json({ message: 'Reservation deleted' });
+    res.redirect('/');
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error' });
   }
 };
 
 
 module.exports = {
   getAllReservation,
+  getHotelRooms,
   postNewReservation,
   updateReservation,
-  updateReservationCallCenter,
   deleteReservation
 };
