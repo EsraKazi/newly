@@ -12,11 +12,8 @@ async function checkAndUpdateExpiredReservations() {
         reservation.status = "suresi-doldu";
         await reservation.save();
       }
-      
-  
-      console.log("Scheduled task: Checked and updated expired reservations.");
+
     } catch (error) {
-      console.error("Scheduled task error:", error);
     }
   }
   
