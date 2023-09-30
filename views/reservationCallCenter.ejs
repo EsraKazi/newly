@@ -67,6 +67,41 @@
 
         // Call the function initially and whenever the table content changes
         updateMaxHeight();
+
+        const hotelDropdown = document.getElementById('hotel');
+        console.log(hotelDropdown);
+        const roomDropdown = document.getElementById('room');
+
+        // Function to update the room dropdown based on the selected hotel
+        function updateRoomDropdown() {
+            // Clear the room dropdown
+            roomDropdown.innerHTML = '<option value="" disabled selected>Oda Tipi</option>';
+
+            // Get the selected hotel ID
+            const selectedHotelId = hotelDropdown.value;
+
+            // Find the selected hotel in the hotelsData array
+            const selectedHotel = hotelsData.find((hotel) => hotel._id === selectedHotelId);
+
+            // Populate the room dropdown with rooms from the selected hotel
+            if (selectedHotel) {
+                console.log(selectedHotel);
+                selectedHotel.rooms.forEach((rooms) => {
+                    const option = document.createElement('option');
+                    console.log(selectedHotel.rooms);
+                    option.value = rooms.roomName;
+                    option.text = rooms.roomName;
+                    roomDropdown.appendChild(option);
+                });
+            }
+        }
+
+        // Attach an event listener to the hotel dropdown to update the room dropdown
+        hotelDropdown.addEventListener('change', updateRoomDropdown);
+
+
+
+
         });
 </script>
 </head>
@@ -101,20 +136,13 @@
                 
                         <select id="hotel" name="hotel" class="form-control" required>
                             <option value="" disabled selected>Otel</option>
-                            <% roomType.forEach((roomType) => { %>
-                                <option value="<%= roomType.hotel %>">
-                                    <%= roomType.hotel %>
-                                </option>
+                            <% hotels.forEach((hotel) => { %>
+                                <option value="<%= hotel._id %>"><%= hotel.name %></option>
                             <% }); %>
                         </select>
-                
-                        <select id="roomType" name="roomType" class="form-control" required>
+                        
+                        <select id="roomName" name="roomName" class="form-control" required>
                             <option value="" disabled selected>Oda Tipi</option>
-                            <% roomType.forEach((roomType) => { %>
-                                <option value="<%= roomType.roomType %>">
-                                    <%= roomType.roomType %>
-                                </option>
-                            <% }); %>
                         </select>
                 
                         <select id="agency" name="agency" class="form-control" required>
@@ -154,12 +182,17 @@
                                     <td><%= reservation.agency %></td>
                                     <td><%= reservation.description %></td>
                                     <td><%= reservation.status %></td>
-                                    <td>
+                                    <td style="width: 1%;">
                                         <% if (reservation.status === 'beklemede') { %>
-                                            <div class="btn-group" role="group">
-                                            <button class="btn btn-link" data-toggle="tooltip" title="Düzenle"><i class="fas fa-pencil-alt"></i></button>
-                                            <button class="btn btn-link" data-toggle="tooltip" title="İptal Et"><i class="fas fa-times"></i></button>
-                                            </div>
+
+                                            <form action="/update-callcenter/<%= reservation._id %>" method="POST" style="display: inline;">
+                                                <input type="hidden" name="status" value="beklemede">
+                                                <button class="btn btn-link" data-toggle="tooltip" title="Düzenle"><i class="fas fa-pencil-alt"></i></button>
+                                            </form>
+                                            <form action="/delete/<%= reservation._id %>" method="POST" style="display: inline;">
+                                                <input type="hidden" name="status" value="deleted">
+                                                <button class="btn btn-link" data-toggle="tooltip" title="İptal Et"><i class="fas fa-times"></i></button>
+                                            </form>
                                         <% } else { %>
                                             <!-- Add any other buttons or actions you need for different status here -->
                                         <% } %>

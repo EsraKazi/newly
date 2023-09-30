@@ -1,6 +1,6 @@
 const Reservation = require('../models/reservationModel');
 const Agency = require('../models/agencyModel');
-const Room = require('../models/roomModel');
+const Hotel = require('../models/hotelModel');
 const jwtToken = require('../middleware/jwtToken');
 const moment = require("moment");
 require("dotenv").config(); 
@@ -13,13 +13,20 @@ getAllReservation = ('/', async (req, res) => {
     const userRole = user.userRole;
     const reservation = await Reservation.find();
     const agency = await Agency.find();
-    const roomType = await Room.find();
+    const hotels = await Hotel.find();
+
+    hotels.forEach((hotel) => {
+      console.log(`Hotel Name: ${hotel.name}`);
+      hotel.rooms.forEach((rooms, index) => {
+        console.log(`Room ${index + 1}: ${rooms.roomName}`);
+      });
+    });
     
     if (userRole === 'callcenter') {
       res.render('reservationCallCenter.ejs', {
         reservationData: reservation,
         agencies: agency,
-        roomType : roomType
+        hotels : hotels
       });
     } else if (userRole === 'management') {
       res.render('reservationManagement.ejs', {
@@ -121,10 +128,14 @@ updateReservation = async (req, res)  => {
 };  
 
 updateReservationCallCenter = async (req, res)  => {
-  const reservationId = req.params.id;
+  const user = jwtToken.decodeToken(req);
 
+  const reservationId = req.params.id;
+  console.log("this is call center reservation update!");
   try {
-    const updatedReservation = await Reservation.findByIdAndUpdate( {
+    const updatedReservation = await Reservation.findByIdAndUpdate( 
+      reservationId,
+     {
         checkInDate: req.body.checkInDate,
         checkOutDate: req.body.checkOutDate,
         roomType: req.body.roomType,
@@ -145,12 +156,28 @@ updateReservationCallCenter = async (req, res)  => {
     console.error(error);
     res.status(500).send('An error occurred while updating the reservation');
   }
-};  
+};
+
+deleteReservation =  async (req, res) => {
+  try {
+    const reservationId = req.params.id;
+
+    const deletedReservation = await Reservation.findByIdAndDelete(
+      reservationId
+    );
+
+    return res.status(200).json({ message: 'Reservation deleted' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
 
 
 module.exports = {
   getAllReservation,
   postNewReservation,
   updateReservation,
-  updateReservationCallCenter
+  updateReservationCallCenter,
+  deleteReservation
 };
