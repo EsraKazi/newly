@@ -65,14 +65,16 @@
             modal.hide();
         });
 
-        $("input[type='radio']").change(function () {
-            var inputValue = $(this).val();
-            filterCards(inputValue);
-        });
+        $(document).ready(function () {
+            $("input[type='radio']").change(function () {
+                var inputValue = $(this).val();
+                filterCards(inputValue);
+            });
 
+        // Varsayılan olarak "all" radyo düğmesini işaretle
         $("input[name='status'][value='all']").prop("checked", true);
         filterCards("all");
-
+        
         function filterCards(value) {
             if (value == 'all') {
                 $(".order-list").show();
@@ -81,6 +83,8 @@
                 $(".order-list.status-" + value).show();
             }
         }
+    });
+
 
 
         
@@ -107,9 +111,18 @@
                     </label>
                 </div>
             </div>
+            <div class="input-group">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Yeni Rezervasyon</button>
+                <form class="form-inline ml-auto">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Rezervasyon Ara" aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Yeni Rezervasyon</button>
+    
 
 <!-- Modal -->
 <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
@@ -194,7 +207,7 @@
                                                 <% if (reservation.status === 'beklemede') { %>
                                                     <form action="/delete/<%= reservation._id %>" method="POST" style="display: inline;">
                                                         <input type="hidden" name="status" value="deleted">
-                                                        <button class="btn btn-link" data-toggle="tooltip" title="İptal Et"><i class="fa-solid fa-xmark fa-2xl" style="color: #333c46;"></i></button>
+                                                        <button class="btn btn-link" data-toggle="tooltip" title="Rezervasyonu Sil"><i class="fa-solid fa-xmark fa-2xl" style="color: #333c46;"></i></button>
                                                     </form>
                                                 <% } %>
                                             </div>
@@ -211,60 +224,3 @@
     </div>
 </div>
 <%- include("../views/partials/footer")-%>
-
-<!-- Modal -->
-<div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Yeni Rezervasyon Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Rezervasyon ekleme formu -->
-                <form action="/new" method="POST">
-                    <div class="form-group">
-                        <label for="checkInDate">Giriş Tarihi</label>
-                        <input type="date" id="checkInDate" name="checkInDate" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="checkOutDate">Çıkış Tarihi</label>
-                        <input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="hotel">Otel</label>
-                        <select id="hotel" name="hotel" class="form-control" required>
-                            <option value="" disabled selected>Otel Seçin</option>
-                            <% hotels.forEach((hotel) => { %>
-                                <option value="<%= hotel.name %>"><%= hotel.name %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="roomName">Oda Tipi</label>
-                        <select id="roomName" name="roomName" class="form-control" required>
-                            <option value="" disabled selected>Oda Tipi Seçin</option>
-                            <!-- Oda tiplerini buraya ekleyin -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="agency">Acente</label>
-                        <select id="agency" name="agency" class="form-control" required>
-                            <option value="" disabled selected>Acente Seçin</option>
-                            <% agencies.forEach((agency) => { %>
-                                <option value="<%= agency.name %>"><%= agency.name %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Açıklama</label>
-                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Açıklama"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Rezervasyon Ekle</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
