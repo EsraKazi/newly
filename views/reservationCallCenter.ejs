@@ -1,7 +1,24 @@
 <%- include("../views/partials/header", { title: 'Swandor', name: 'reservation' })-%>
 
 <script>
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = new bootstrap.Modal(document.getElementById("reservationModal"));
+        const reservationForm = document.getElementById("reservationForm");
+
+        // "Rezervasyon Ekle" düğmesine tıklanınca modalı aç
+        document.getElementById("openModalButton").addEventListener("click", function () {
+            modal.show();
+        });
+
+        // "Rezervasyon Ekle" düğmesine tıklanınca formu gönder
+        document.getElementById("submitReservation").addEventListener("click", function () {
+            // Form verilerini alabilir ve sunucuya gönderebilirsiniz.
+            // Örnek: Ajax veya fetch kullanarak veriyi sunucuya POST edebilirsiniz.
+
+            // Form gönderildikten sonra modalı kapat
+            modal.hide();
+        });
+
         $("input[type='radio']").change(function () {
             var inputValue = $(this).val();
             filterCards(inputValue);
@@ -34,34 +51,29 @@
         });
         // Disable past dates for Check Out
         $("#checkOutDate").attr("min", today);
-    });
 
-    // Mobilde "Yeni rezervasyon" butonuna tıklanınca modalı aç
-    document.getElementById("openModalButton").addEventListener("click", function() {
-        var modal = new bootstrap.Modal(document.getElementById("reservationModal"));
-        modal.show();
-    });
+        const hotelDropdown = document.getElementById('hotel');
+        hotelDropdown.addEventListener('change', () => {
+            const roomDropdown = document.getElementById('roomName');
+            roomDropdown.innerHTML = '<option value="" disabled selected>Oda Tipi</option>';
 
-    const hotelDropdown = document.getElementById('hotel');
-    hotelDropdown.addEventListener('change', () => {
-        const roomDropdown = document.getElementById('roomName');
-        roomDropdown.innerHTML = '<option value="" disabled selected>Oda Tipi</option>';
-
-        const hotelName = hotelDropdown.value;
-        fetch(`/getRooms/${hotelName}`)
-            .then((response) => {
-                return response.json();
-            })
-            .then((rooms) => {
-                rooms.forEach((room) => {
-                    const option = document.createElement('option');
-                    option.value = room;
-                    option.textContent = room;
-                    roomDropdown.appendChild(option);
+            const hotelName = hotelDropdown.value;
+            fetch(`/getRooms/${hotelName}`)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((rooms) => {
+                    rooms.forEach((room) => {
+                        const option = document.createElement('option');
+                        option.value = room;
+                        option.textContent = room;
+                        roomDropdown.appendChild(option);
+                    });
                 });
-            });
+        });
     });
 </script>
+
 </head>
 <body>
 <%- include("../views/partials/navbar")-%>
@@ -84,39 +96,48 @@
             </div>
         </div>
     </div>
-    <form action="/new" method="POST" class="form-inline">
-        <div class="input-group">
-    
-            <input type="date" id="checkInDate" name="checkInDate" class="form-control" required placeholder="Giriş Tarihi">
-    
-            <input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required placeholder="Çıkış Tarihi">
-            
-    
-            <select id="hotel" name="hotel" class="form-control"  required>
-                <option value="" disabled selected>Otel</option>
-                <% hotels.forEach((hotel) => { %>
-                    <option value="<%= hotel.name %>"><%= hotel.name %></option>
-                <% }); %>
-            </select>
-            
-            <select id="roomName" name="roomName" class="form-control" required>
-                <option value="" disabled selected>Oda Tipi</option>
-            </select>
-    
-            <select id="agency" name="agency" class="form-control" required>
-                <option value="" disabled selected>Acente</option>
-                <% agencies.forEach((agency) => { %>
-                    <option value="<%= agency.name %>" >
-                        <%= agency.name %>
-                    </option>
-                <% }); %>
-            </select>
-    
-            <textarea class="form-control" id="description" name="description" rows="1" placeholder="Açıklama"></textarea>
-    
-            <button type="submit" class="btn btn-primary">Rezervasyon Ekle</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Yeni Rezervasyon</button>
+
+<!-- Modal -->
+<div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reservationModalLabel">Yeni Rezervasyon Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/new" method="POST" class="form-inline">
+                    <div class="input-group">
+                        <input type="date" id="checkInDate" name="checkInDate" class="form-control" required placeholder="Giriş Tarihi">
+                        <input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required placeholder="Çıkış Tarihi">
+                        <select id="hotel" name="hotel" class="form-control" required>
+                            <option value="" disabled selected>Otel</option>
+                            <% hotels.forEach((hotel) => { %>
+                                <option value="<%= hotel.name %>"><%= hotel.name %></option>
+                            <% }); %>
+                        </select>
+                        <select id="roomName" name="roomName" class="form-control" required>
+                            <option value="" disabled selected>Oda Tipi</option>
+                        </select>
+                        <select id="agency" name="agency" class="form-control" required>
+                            <option value="" disabled selected>Acente</option>
+                            <% agencies.forEach((agency) => { %>
+                                <option value="<%= agency.name %>"><%= agency.name %></option>
+                            <% }); %>
+                        </select>
+                        <textarea class="form-control" id="description" name="description" rows="1" placeholder="Açıklama"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="submit" class="btn btn-primary">Rezervasyon Ekle</button>
+            </div>
         </div>
-    </form>
+    </div>
+</div>
+
     <div class="card-container">
         <div class="osahan-account-page-right shadow-sm bg-white p-4 h-100">
             <div class="tab-content" id="myTabContent">
