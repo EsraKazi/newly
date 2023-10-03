@@ -139,6 +139,9 @@ updateReservation = async (req, res)  => {
 
     await updatedReservation.save();
 
+    io.emit('reservationUpdated', { message: 'Rezervasyon güncellendi' });
+
+
     res.redirect('/');
   } catch (error) {
     res.status(500).send('An error occurred while updating the reservation');
