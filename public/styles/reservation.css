@@ -21,6 +21,17 @@ body {
 .order-list.status-suresi-doldu {
     background-color: rgba(120, 120, 120, 0.307);
 }
+.card-container {
+    max-height: 70vh; /* Kartların maksimum yüksekliği */
+    overflow: auto; /* Kartların taşmasını önler ve kaydırma çubuğunu ekler */
+}
+.text-limit {
+    max-width: 500px; /* Maksimum genişlik */
+    white-space: nowrap; /* Metni satıra sığdırmaz, tek bir satırda görünmesini sağlar */
+    overflow: hidden; /* Taşan metni gizler */
+    text-overflow: ellipsis; /* Taşan metni üç nokta (...) ile gösterir */
+}
+
 
 .table-title .btn-group {
     float: right;
