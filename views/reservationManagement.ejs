@@ -53,65 +53,83 @@
 </script>
 </head>
 <body>
-    <%- include("../views/partials/navbarManagement")-%>
-    <div class="container-xl">
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-6"><h2>Rezervasyonlar</h2></div>
-                    <div class="col-sm-6">
-                        <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-info">
-                                <input type="radio" name="status" value="beklemede" checked> Bekleyen
-                            </label>
-                            <label class="btn btn-success">
-                                <input type="radio" name="status" value="onaylandi"> Onaylanan
-                            </label>
-                            <label class="btn btn-danger">
-                                <input type="radio" name="status" value="reddedildi"> Reddedilen
-                            </label>
-                        </div>
-                    </div>
+<%- include("../views/partials/navbarManagement")-%>
+<div class="container-xl">
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-6"><h2>Rezervasyonlar</h2></div>
+            <div class="col-sm-6">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-info">
+                        <input type="radio" name="status" value="beklemede"> Bekleyen
+                    </label>
+                    <label class="btn btn-success">
+                        <input type="radio" name="status" value="onaylandi"> Onaylanan
+                    </label>
+                    <label class="btn btn-danger">
+                        <input type="radio" name="status" value="reddedildi"> Reddedilen
+                    </label>
                 </div>
             </div>
-            <div id="table-container" style="overflow-x: auto;">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Reservasyon ID'si</th>
-                            <th>Check In / Check Out</th>
-                            <th>Otel</th>
-                            <th>Oda Türü</th>
-                            <th>Açıklama</th>
-                            <th>Durum</th>
-                            <th>Düzenle</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% reservationData.reverse().forEach((reservation) => { %>
-                            <tr data-status="<%= reservation.status %>">
-                                <td><%= reservation.reservationId %></td>
-                                <td><%= reservation.checkInDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %> - <%= reservation.checkOutDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %></td>
-                                <td><%= reservation.hotel %></td>
-                                <td><%= reservation.roomType %></td>
-                                <td><%= reservation.description %></td>
-                                <td><%= reservation.status %></td>
-                                <td style="width: 1%;">
-                                    <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
-                                        <input type="hidden" name="status" value="onaylandi">
-                                        <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Onayla"><i class="fas fa-check"></i></button>
-                                    </form>
-                                    <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
-                                        <input type="hidden" name="status" value="reddedildi">
-                                        <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Reddet"><i class="fas fa-times"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-            </table>
+            <div class="input-group">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Yeni Rezervasyon</button>
+                <form class="form-inline ml-auto">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Rezervasyon Ara" aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-</body>
-</html>
+
+    <div class="card-container">
+        <div class="osahan-account-page-right shadow-sm p-4 h-100">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade active show" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                    <% reservationData.reverse().forEach((reservation) => { %>
+                    <div class="card mb-4 order-list shadow-sm status-<%= reservation.status %>">
+                        <div class="gold-members p-4">
+                            <div class="media">
+                                <div class="media-body">
+                                    <span class="float-right text-info"><%= reservation.agency %> - <%= reservation.reservationId %></span>
+                                    <h6 class="mb-2">
+                                        <p class="text-black"><%= reservation.hotel %> - <%= reservation.roomType %></p>
+                                    </h6>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="left-col">
+                                            <h3 class="text-gray mb-1"><i class="icofont-location-arrow"></i> <%= reservation.checkInDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %> - <%= reservation.checkOutDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %></h3>
+                                            <p class="mb-0 text-black text-primary pt-2"><span class="text-black font-weight-bold"> Durum:</span> <%= reservation.status %></p>
+                                        </div>
+                                        <div class="text-center middle-col">
+                                            <p class="text-gray text-limit mb-3"><i class="icofont-list"></i> <%= reservation.description %></p>
+                                        </div>
+                                        <div class="right-col">
+                                            <div class="float-right">
+                                                    <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
+                                                        <input type="hidden" name="status" value="onaylandi">
+                                                        <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Onayla"><i class="fas fa-check fa-2xl"  style="color: #07bb22;"></i></button>
+                                                    </form>
+                                                    <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
+                                                        <input type="hidden" name="status" value="reddedildi">
+                                                        <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Reddet"><i class="fas fa-times fa-2xl" style="color: #c80000;"></i></button>
+                                                    </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+            
+     
+</div>
 
 <%- include("../views/partials/footer")-%>

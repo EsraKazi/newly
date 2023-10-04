@@ -1,20 +1,20 @@
 body {
     color: #566787;
-    background: #f5f5f5;
     font-family: 'Roboto', sans-serif;
 }/* Bekleyen durumu için kart rengi */
+
 .order-list.status-beklemede {
     background-color: rgb(255, 255, 255);
 }
 
 /* Onaylanan durumu için kart rengi */
 .order-list.status-onaylandi {
-    background-color: rgba(144, 238, 144, 0.665);
+    background-color: 	#e2f4dc;
 }
 
 /* Reddedilen durumu için kart rengi */
 .order-list.status-reddedildi {
-    background-color: rgba(240, 128, 128, 0.593);
+    background-color: #ffd6db;
 }
 
 /* Diğer durumlar için kart rengi */
