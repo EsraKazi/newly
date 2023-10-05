@@ -5,8 +5,6 @@ const mongoose = require('mongoose');
 const app = express();
 require('dotenv').config();
 
-const socketIO = require('socket.io');
-
 const authRouter = require('./routes/authRoutes');
 const reservationRouter = require('./routes/reservationRoutes');
 
@@ -25,13 +23,5 @@ require('./middleware/setInterval');
 
 mongoose
   .connect(`${process.env.DB_CONNECT}`)
-  .then((result) => {
-    // Express sunucusunu Socket.io ile başlatın
-    const server = require('http').createServer(app);
-    const io = socketIO(server);
-
-    server.listen(process.env.PORT, () => {
-      console.log(`Server is running on port ${process.env.PORT}`);
-    });
-  })
-  .catch((err) => console.error(err));
+  .then((result) => app.listen(process.env.PORT))
+  .catch(err => console.error(err));

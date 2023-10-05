@@ -12,7 +12,6 @@ function decodeToken(req){
         const user = decoded;
         return user;
     } catch (error) {
-        console.error('Token decoding error:', error);
         return '/login'; // Return the '/login' URL in case of an error
     }
 }
@@ -20,7 +19,6 @@ function decodeToken(req){
 function generateToken(userData) {
     return jwt.sign(userData, SECRET_KEY, { expiresIn: '1d' });
 }
-
 function deleteToken(res){
     res.cookie('jwt', '', { expires: new Date(0), httpOnly: true, secure: true, sameSite: 'strict' });
 }

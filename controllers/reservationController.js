@@ -139,7 +139,6 @@ updateReservation = async (req, res)  => {
 
     await updatedReservation.save();
 
-    io.emit('reservationUpdated', { message: 'Rezervasyon güncellendi' });
 
 
     res.redirect('/');

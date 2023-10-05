@@ -20,36 +20,12 @@
             }
         }
 
-        // Add this code to change row colors based on data-status
-        $("table tbody tr").each(function () {
-            var status = $(this).attr("data-status");
-            switch (status) {
-                case "onaylandi":
-                    $(this).addClass("table-success");
-                    break;
-                case "reddedildi":
-                    $(this).addClass("table-danger");
-                    break;
-                case "beklemede":
-                    $(this).addClass("table-light");
-                    break;
-                // Add more cases if needed
-            }
-        });
-        const tableContainer = document.getElementById('table-container');
-
-        // Function to update the max-height based on the content
-        function updateMaxHeight() {
-            const table = tableContainer.querySelector('table');
-            const tableHeight = table.getBoundingClientRect().height;
-            const maxHeight = Math.min(600, tableHeight);
-            tableContainer.style.maxHeight = maxHeight + 'px';
-
-        }
-
-        // Call the function initially and whenever the table content changes
-        updateMaxHeight();
     });
+</script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/middleware/socket.js"></script>
+<script>
+  const socket = io();
 </script>
 </head>
 <body>
@@ -72,7 +48,6 @@
                 </div>
             </div>
             <div class="input-group">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Yeni Rezervasyon</button>
                 <form class="form-inline ml-auto">
                     <input class="form-control mr-sm-2" type="search" placeholder="Rezervasyon Ara" aria-label="Search">
                     <button class="btn btn-outline-secondary" type="submit">
