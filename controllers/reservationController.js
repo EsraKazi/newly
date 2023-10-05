@@ -3,6 +3,7 @@ const Agency = require('../models/agencyModel');
 const Hotel = require('../models/hotelModel');
 const jwtToken = require('../middleware/jwtToken');
 const moment = require("moment");
+const { emitReservationUpdate } = require('../app');
 require("dotenv").config(); 
 
 let autoIncrement = 1;
@@ -105,6 +106,7 @@ postNewReservation = async (req, res) => {
     });
 
     await reservation.save();
+    
 
     res.redirect('/');
   } catch (error) {
@@ -125,19 +127,16 @@ updateReservation = async (req, res)  => {
       { status: newStatus }
     );
 
-    if (!updatedReservation) {
-      return res.status(404).send('Reservation not found');
-    }
+    updatedReservation.confirmed = true;
+    updatedReservation.confirmedBy = user.username;
+    const confirmationDeadline = new Date();
+    confirmationDeadline.setHours(confirmationDeadline.getHours() + 3);
+    updatedReservation.confirmationDeadline = confirmationDeadline;
+    console.log(updatedReservation);
 
-    if(newStatus === "onaylandi"){
-      confirmed = true;
-      const confirmationDeadline = new Date();
-      confirmationDeadline.setHours(confirmationDeadline.getHours() + 3);
-      updatedReservation.confirmationDeadline = confirmationDeadline;
-      confirmedBy = user.username
-    }
-
+    console.log(updatedReservation);
     await updatedReservation.save();
+    emitReservationUpdate(updatedReservation);
 
 
 
