@@ -115,36 +115,68 @@ postNewReservation = async (req, res) => {
 };
 
 
-updateReservation = async (req, res)  => {
-  const user = jwtToken.decodeToken(req);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const updateReservation = async (req, res) => {
+  const user = jwtToken.decodeToken(req);
   const reservationId = req.params.id;
-  const newStatus = req.body.status;
+  const newDescription = req.body.description;
 
   try {
-    const updatedReservation = await Reservation.findByIdAndUpdate(
-      reservationId,
-      { status: newStatus }
-    );
+      const updatedReservation = await Reservation.findByIdAndUpdate(
+          reservationId,
+          { description: newDescription },
+          { new: true }
+      );
 
-    updatedReservation.confirmed = true;
-    updatedReservation.confirmedBy = user.username;
-    const confirmationDeadline = new Date();
-    confirmationDeadline.setHours(confirmationDeadline.getHours() + 3);
-    updatedReservation.confirmationDeadline = confirmationDeadline;
-    console.log(updatedReservation);
+      if (!updatedReservation) {
+          return res.status(404).json({ error: 'Reservation not found' });
+      }
 
-    console.log(updatedReservation);
-    await updatedReservation.save();
-    emitReservationUpdate(updatedReservation);
-
-
-
-    res.redirect('/');
+      res.json(updatedReservation);
   } catch (error) {
-    res.status(500).send('An error occurred while updating the reservation');
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
   }
-};  
+};
+
+module.exports = {
+  updateReservation,
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 deleteReservation =  async (req, res) => {
   try {
