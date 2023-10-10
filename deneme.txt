@@ -1,3 +1,22 @@
-
-
-reservation number : yy.mm.dd.agencyno.reservationNoAutoIncrement
+<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reservationModalLabel">Rezervasyon Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/update/<%= reservation._id %>" method="POST">
+                    <div class="form-group">
+                        <label for="description">Açıklama</label>
+                        <textarea class="form-control" id="description" name="description" rows="4"><%= reservation.description %></textarea>
+                    </div>
+                    <input type="hidden" name="status" value="duzenlendi">
+                    <button type="submit" class="btn btn-primary">Rezervasyonu Güncelle</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

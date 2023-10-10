@@ -5,8 +5,16 @@ const jwtToken = require('../middleware/jwtToken');
 const moment = require("moment");
 const { emitReservationUpdate } = require('../app');
 require("dotenv").config(); 
-
 let autoIncrement = 1;
+
+
+
+
+/////        R O U T E S       /////
+
+
+
+/////       R E Z E R V A S Y O N   L İ S T E L E M E       /////
 
 getAllReservation = ('/', async (req, res) => {
 
@@ -44,18 +52,7 @@ getAllReservation = ('/', async (req, res) => {
 });
 
 
-getHotelRooms = async (req, res) => {
-  try {
-    const hotelName = req.params.hotelName;
-
-    const hotel = await Hotel.findOne({ name: hotelName });
-    const roomNames = hotel.rooms.map((room) => room.roomName);
-    res.json(roomNames);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
+/////       R E Z E R V A S Y O N   O L U Ş T U R M A      /////
 
 postNewReservation = async (req, res) => {
   const user = jwtToken.decodeToken(req);
@@ -64,24 +61,27 @@ postNewReservation = async (req, res) => {
     const hotel = req.body.hotel;
     const room = req.body.roomName;
 
-    //ID oluştruma
-    //#############################################################################
+    /////       C U S T O M    I D    O L U Ş T U R M A       /////
     const lastReservation = await Reservation.findOne({})
-    .sort({ reservationId: -1 })
-    .exec();
-  
+      .sort({ reservationId: -1 })
+      .exec();
+
+
     if (lastReservation && lastReservation.reservationId) {
       const lastThreeDigits = lastReservation.reservationId.slice(-3);
 
       const lastReservationDate = lastReservation.reservationId.slice(0, 6);
 
+
       const currentDate = moment().format('YYMMDD');
+
 
       if (currentDate === lastReservationDate) {
         autoIncrement = parseInt(lastThreeDigits) + 1;
       } else {
         autoIncrement = 1;
       }
+
     }
 
     const currentDate = moment().format('YYMMDD');
@@ -89,9 +89,10 @@ postNewReservation = async (req, res) => {
     const autoIncrementValue = autoIncrement.toString().padStart(3, '0');
 
     const reservationId = `${currentDate}${hotelPrefix}${autoIncrementValue}`;
-    
-    //#############################################################################
-    
+
+
+    /////////////////////////////////////////////////////////////////////
+
     const reservation = new Reservation({
       reservationId: reservationId,
       checkInDate: req.body.checkInDate,
@@ -99,23 +100,29 @@ postNewReservation = async (req, res) => {
       hotel: hotel,
       roomType: room,
       agency: req.body.agency,
-      addedBy: user.username,
+      createdAt: Date.now(),
+      createdBy: user.username,
       description: req.body.description,
       confirmed: false,
+      confirmedAt: null,
+      confirmedBy: null,
       confirmationDeadline: null,
     });
 
     await reservation.save();
-    
+    addNewReservationToPage(reservation);
 
     res.redirect('/');
   } catch (error) {
+    console.error("Error:", error);
     res.redirect('/login');
   }
 };
 
 
-updateReservation = async (req, res)  => {
+/////       R E Z E R V A S Y O N   K O N F İ R M E       /////
+
+acceptReservation = async (req, res)  => {
   const user = jwtToken.decodeToken(req);
 
   const reservationId = req.params.id;
@@ -129,6 +136,7 @@ updateReservation = async (req, res)  => {
 
     updatedReservation.confirmed = true;
     updatedReservation.confirmedBy = user.username;
+    updatedReservation.confirmedAt = new Date();
     const confirmationDeadline = new Date();
     confirmationDeadline.setHours(confirmationDeadline.getHours() + 3);
     updatedReservation.confirmationDeadline = confirmationDeadline;
@@ -136,7 +144,6 @@ updateReservation = async (req, res)  => {
 
     console.log(updatedReservation);
     await updatedReservation.save();
-    emitReservationUpdate(updatedReservation);
 
 
 
@@ -144,7 +151,36 @@ updateReservation = async (req, res)  => {
   } catch (error) {
     res.status(500).send('An error occurred while updating the reservation');
   }
-};  
+};
+
+/////       R E Z E R V A S Y O N   D Ü Z E N L E M E      /////
+
+updateReservation = async (req, res)  => {
+  const user = jwtToken.decodeToken(req);
+
+  const reservationId = req.params.id;
+  const newStatus = req.body.status;
+
+  try {
+    const updatedReservation = await Reservation.findById(
+      reservationId
+    );
+
+    updatedReservation.updatedBy = user.username;
+    updatedReservation.updatedAt = new Date();
+
+    console.log(updatedReservation);
+    await updatedReservation.save();
+
+
+
+    res.redirect('/');
+  } catch (error) {
+    res.status(500).send('An error occurred while updating the reservation');
+  }
+};    
+
+/////       R E Z E R V A S Y O N   S İ L M E       /////
 
 deleteReservation =  async (req, res) => {
   try {
@@ -161,10 +197,43 @@ deleteReservation =  async (req, res) => {
 };
 
 
+/////       A P I ' S       /////
+
+
+/////      O T E L / O D A    F İ L T R E L E M E      /////
+
+getHotelRooms = async (req, res) => {
+  try {
+    const hotelName = req.params.hotelName;
+    const hotel = await Hotel.findOne({ name: hotelName });
+    const roomNames = hotel.rooms.map((room) => room.roomName);
+    res.json(roomNames);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+/////       R E Z E R V A S Y O N   A R A M A       /////
+
+getReservationById = async (req,res) => {
+  
+  try {
+    const reservationID = req.params.reservationId;
+    const reservation = await Reservation.findOne({ reservationId: reservationID });
+    const roomNames = hotel.rooms.map((room) => room.roomName);
+    res.json(reservation);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 module.exports = {
   getAllReservation,
   getHotelRooms,
   postNewReservation,
+  acceptReservation,
   updateReservation,
   deleteReservation
 };

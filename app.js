@@ -25,6 +25,11 @@ const io = socketIo(server);
 
 io.on('connection', (socket) => {
   console.log('A user connected');
+  
+  socket.on('newReservation', (reservation) => {
+    console.log('Yeni rezervasyon alındı:', reservation);
+    io.emit('newReservation', reservation); // Tüm bağlı istemcilere yeni rezervasyonu gönder
+});
 
   socket.on('disconnect', () => {
     console.log('A user disconnected');

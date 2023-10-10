@@ -6,6 +6,9 @@ body {
 .order-list.status-beklemede {
     background-color: rgb(255, 255, 255);
 }
+.order-list.status-duzenlendi {
+    background-color: #fcf5c7;
+}
 
 /* Onaylanan durumu için kart rengi */
 .order-list.status-onaylandi {
@@ -77,6 +80,60 @@ body {
 
 .btn.active label {
     font-weight: bold;
+}
+/* Modal container */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Modal content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+}
+
+/* Close button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Modal header */
+.modal-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Modal body */
+.modal-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Left column */
+.left-column {
+  flex: 1;
+  padding-right: 20px;
+}
+
+/* Right column */
+.right-column {
+  flex: 1;
+  padding-left: 20px;
 }
 
 @media (max-width: 768px) {

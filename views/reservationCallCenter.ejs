@@ -4,25 +4,25 @@
     document.addEventListener("DOMContentLoaded", function () {
         const modal = new bootstrap.Modal(document.getElementById("reservationModal"));
 
-// Check-in ve Check-out alanlarını al
+/////    Check-in ve Check-out alanlarını al     ////
     const checkInDateInput = document.getElementById("checkInDate");
     const checkOutDateInput = document.getElementById("checkOutDate");
 
-    // Bugünün tarihini al ve Check-in alanının minimum değerine ayarla
+    /////   Bugünün tarihini al ve Check-in alanının minimum değerine ayarla      ////
     const today = new Date().toISOString().split("T")[0];
     checkInDateInput.min = today;
 
-    // Check-in tarihi değiştiğinde
+    /////   Check-in tarihi değiştiğinde      /////
     checkInDateInput.addEventListener("change", function () {
         const checkInDate = new Date(this.value);
         const checkOutDate = new Date(checkOutDateInput.value);
 
-        // Eğer Check-out tarihi, Check-in tarihinden önceyse, Check-out tarihini sıfırla
+        /////        Eğer Check-out tarihi, Check-in tarihinden önceyse, Check-out tarihini sıfırla     /////
         if (checkOutDate < checkInDate) {
             checkOutDateInput.value = this.value;
         }
 
-        // Check-out alanının minimum değerini ayarla
+        /////    Check-out alanının minimum değerini ayarla        /////
         checkOutDateInput.min = this.value;
     });
 
@@ -49,6 +49,17 @@
                 });
         }
     });
+
+
+
+
+
+
+    document.getElementById("search-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const searchTerm = document.getElementById("search-input").value;
+        // Burada Node.js API endpoint'inize sorguyu göndermek için fetch veya başka bir yöntem kullanabilirsiniz.
+    });
         // "Rezervasyon Ekle" düğmesine tıklanınca modalı aç
         document.getElementById("openModalButton").addEventListener("click", function () {
             modal.show();
@@ -64,6 +75,17 @@
             const description = document.getElementById('description').value;
             modal.hide();
         });
+
+
+
+
+
+
+
+
+
+
+        
 
         $(document).ready(function () {
             $("input[type='radio']").change(function () {

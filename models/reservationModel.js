@@ -30,8 +30,13 @@ const reservationSchema = mongoose.Schema({
     required: true
   },
 
-  addedBy: {
+  createdBy: {
     type: String,
+    required: true
+  },
+
+  createdAt: {
+    type: Date,
     required: true
   },
 
@@ -48,8 +53,18 @@ const reservationSchema = mongoose.Schema({
   confirmed: {
     type: Boolean
   },
+  confirmedAt: {
+    type: Date
+  },
 
   confirmedBy: {
+    type: String
+  },
+  updatedAt: {
+    type: Date
+  },
+
+  updatedBy: {
     type: String
   },
 

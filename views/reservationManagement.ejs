@@ -20,12 +20,23 @@
             }
         }
 
+        function searchReservation() {
+    const searchTerm = document.getElementById("search-input").value;
+    console.log(searchTerm);
+    // Arama sorgusunu sunucuya göndermek için fetch veya başka bir yöntem kullanabilirsiniz.
+}
+
+
+
+
+
+
+
+
+
+
+
     });
-</script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/middleware/socket.js"></script>
-<script>
-  const socket = io();
 </script>
 </head>
 <body>
@@ -48,16 +59,19 @@
                 </div>
             </div>
             <div class="input-group">
-                <form class="form-inline ml-auto">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Rezervasyon Ara" aria-label="Search">
-                    <button class="btn btn-outline-secondary" type="submit">
+                <form class="form-inline ml-auto" id="searchForm">
+                    <input class="form-control mr-sm-2" type="text" id="reservationId" placeholder="Rezervasyon Ara" aria-label="Search">
+                    <button class="btn btn-outline-secondary" type="button" onclick="searchReservation()">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
             </div>
+            
         </div>
     </div>
 
+
+    
     <div class="card-container">
         <div class="osahan-account-page-right shadow-sm p-4 h-100">
             <div class="tab-content" id="myTabContent">
@@ -81,11 +95,18 @@
                                         </div>
                                         <div class="right-col">
                                             <div class="float-right">
-                                                    <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
+                                                    <form action="/confirm/<%= reservation._id %>" method="POST" style="display: inline;">
                                                         <input type="hidden" name="status" value="onaylandi">
                                                         <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Onayla"><i class="fas fa-check fa-2xl"  style="color: #07bb22;"></i></button>
                                                     </form>
                                                     <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
+                                                        <input type="hidden" name="status" value="duzenlendi">
+                                                        <button type="button" class="btn btn-link" data-toggle="tooltip" title="Düzenle" data-reservation-id="<%= reservation._id %>">
+                                                            <i class="fa-solid fa-pen-to-square fa-2xl" style="color: #e9d502;"></i>
+                                                        </button>
+                                                    </form>
+                                                                                                 
+                                                    <form action="/confirm/<%= reservation._id %>" method="POST" style="display: inline;">
                                                         <input type="hidden" name="status" value="reddedildi">
                                                         <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Reddet"><i class="fas fa-times fa-2xl" style="color: #c80000;"></i></button>
                                                     </form>
