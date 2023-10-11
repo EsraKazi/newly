@@ -1,46 +1,9 @@
 <%- include("../views/partials/header", { title: 'Swandor', name: 'reservation' })-%>
 
-<script>
-    $(document).ready(function () {
-        $("input[type='radio']").change(function () {
-            var inputValue = $(this).val();
-            filterTable(inputValue);
-        });
-
-        $("input[name='status'][value='beklemede']").prop("checked", true);
-        filterTable("beklemede");
-
-
-        function filterTable(value) {
-            if (value == 'all') {
-                $("table tbody tr").show();
-            } else {
-                $("table tbody tr").hide();
-                $("table tbody tr[data-status='" + value + "']").show();
-            }
-        }
-
-        function searchReservation() {
-    const searchTerm = document.getElementById("search-input").value;
-    console.log(searchTerm);
-    // Arama sorgusunu sunucuya göndermek için fetch veya başka bir yöntem kullanabilirsiniz.
-}
-
-
-
-
-
-
-
-
-
-
-
-    });
-</script>
 </head>
 <body>
 <%- include("../views/partials/navbarManagement")-%>
+
 <div class="container-xl">
     <div class="table-title">
         <div class="row">
@@ -59,14 +22,11 @@
                 </div>
             </div>
             <div class="input-group">
-                <form class="form-inline ml-auto" id="searchForm">
-                    <input class="form-control mr-sm-2" type="text" id="reservationId" placeholder="Rezervasyon Ara" aria-label="Search">
-                    <button class="btn btn-outline-secondary" type="button" onclick="searchReservation()">
+                    <input class="form-inline ml-auto"  type="text" id="reservationId" placeholder="Rezervasyon Ara">
+                    <button class="btn btn-outline-secondary" type="submit" formmethod="post" onclick="searchReservation()">
                         <i class="fas fa-search"></i>
                     </button>
-                </form>
             </div>
-            
         </div>
     </div>
 
@@ -99,11 +59,8 @@
                                                         <input type="hidden" name="status" value="onaylandi">
                                                         <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Onayla"><i class="fas fa-check fa-2xl"  style="color: #07bb22;"></i></button>
                                                     </form>
-                                                    <form action="/update/<%= reservation._id %>" method="POST" style="display: inline;">
-                                                        <input type="hidden" name="status" value="duzenlendi">
-                                                        <button type="button" class="btn btn-link" data-toggle="tooltip" title="Düzenle" data-reservation-id="<%= reservation._id %>">
-                                                            <i class="fa-solid fa-pen-to-square fa-2xl" style="color: #e9d502;"></i>
-                                                        </button>
+                                                    <form action="/update/<%= reservation.reservationId %>" method="POST" style="display: inline;">
+                                                        <button type="submit" class="btn btn-link" data-toggle="tooltip" title="Düzenle"> <i class="fa-solid fa-pen-to-square fa-2xl" style="color: #e9d502;"></i></button>
                                                     </form>
                                                                                                  
                                                     <form action="/confirm/<%= reservation._id %>" method="POST" style="display: inline;">
@@ -125,7 +82,17 @@
 
 
             
-     
+    <script>
+        function searchReservation() {
+            const reservationValue = document.getElementById("reservationId").value;
+            if (reservationValue) {
+                fetch(`/update/${reservationValue}`, {
+                    method: 'POST', 
+                });
+            }
+        }
+    </script>
 </div>
+
 
 <%- include("../views/partials/footer")-%>

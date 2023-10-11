@@ -46,30 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Arama sorgusunu gönder
-    document.getElementById("search-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const searchTerm = document.getElementById("search-input").value;
-
-        // Arama sorgusunu sunucuya gönder
-        fetch(`/update/${searchTerm}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            // Sunucudan gelen yanıtı işle (örneğin, sonuçları göster)
-            console.log("Arama Sonuçları:", data);
-
-            // İşlem sonuçlarını ekrana gösterebilir veya başka bir işlem yapabilirsiniz
-        })
-        .catch((error) => {
-            console.error("Arama Hatası:", error);
-        });
-    });
-
     // "Rezervasyon Ekle" düğmesine tıklanınca modalı aç
     document.getElementById("openModalButton").addEventListener("click", function () {
         modal.show();

@@ -50,6 +50,35 @@ getAllReservation = ('/', async (req, res) => {
     res.redirect('/');
   }
 });
+/////       R E Z E R V A S Y O N   D Ü Z E N L E M E      /////
+
+
+updateReservation = async (req, res)  => {
+  const user = jwtToken.decodeToken(req);
+
+ 
+  const reservationId = req.params.id;
+  console.log(reservationId);
+
+  try {
+    const updatedReservation = await Reservation.findOneAndUpdate(
+      { reservationId },
+      {
+        $set: {
+          status : "duzenlendi",
+          updated: true,
+          updatedBy: user.username,
+          updatedAt: new Date(),
+        },
+      },
+      { new: true } // This option returns the updated document
+    );
+    res.redirect('/');
+  } catch (error) {
+    res.status(500).send('An error occurred while confirming the reservation');
+  }
+};    
+  
 
 
 /////       R E Z E R V A S Y O N   O L U Ş T U R M A      /////
@@ -121,7 +150,7 @@ postNewReservation = async (req, res) => {
 
 
 /////       R E Z E R V A S Y O N   K O N F İ R M E       /////
-
+//confirm
 acceptReservation = async (req, res)  => {
   const user = jwtToken.decodeToken(req);
 
@@ -140,45 +169,16 @@ acceptReservation = async (req, res)  => {
     const confirmationDeadline = new Date();
     confirmationDeadline.setHours(confirmationDeadline.getHours() + 3);
     updatedReservation.confirmationDeadline = confirmationDeadline;
-    console.log(updatedReservation);
-
-    console.log(updatedReservation);
     await updatedReservation.save();
 
 
 
     res.redirect('/');
   } catch (error) {
-    res.status(500).send('An error occurred while updating the reservation');
+    res.status(500).send('An error occurred while confirming the reservation');
   }
 };
 
-/////       R E Z E R V A S Y O N   D Ü Z E N L E M E      /////
-
-updateReservation = async (req, res)  => {
-  const user = jwtToken.decodeToken(req);
-
-  const reservationId = req.params.id;
-  const newStatus = req.body.status;
-
-  try {
-    const updatedReservation = await Reservation.findById(
-      reservationId
-    );
-
-    updatedReservation.updatedBy = user.username;
-    updatedReservation.updatedAt = new Date();
-
-    console.log(updatedReservation);
-    await updatedReservation.save();
-
-
-
-    res.redirect('/');
-  } catch (error) {
-    res.status(500).send('An error occurred while updating the reservation');
-  }
-};    
 
 /////       R E Z E R V A S Y O N   S İ L M E       /////
 
