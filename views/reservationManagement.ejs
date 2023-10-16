@@ -57,7 +57,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
                                 <button type="submit" class="btn btn-primary"
-                                    onclick="saveDescription()">Kaydet</button>
+                                    onclick="saveDescription()"data-dismiss="modal">Kaydet</button>
                             </div>
                         </div>
                     </div>
@@ -198,10 +198,22 @@
                     }
 
                     function saveDescription() {
-                        const description = document.getElementById("modalDescription").value;
-                        const status = "duzenlendi";
-                        // Veritabanına kaydetme işlemini burada yapabilirsiniz
+                        const reservationId = document.getElementById("modalReservationId").textContent; // Get the reservation ID from the modal
+
+                        const data = {
+                            description: document.getElementById("description").value,
+                        };
+
+                        fetch(`/update/${reservationId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        })
+
                     }
+
 
 
                 </script>
