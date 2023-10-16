@@ -166,7 +166,7 @@ acceptReservation = async (req, res) => {
     updatedReservation.confirmedBy = user.username;
     updatedReservation.confirmedAt = new Date();
     const confirmationDeadline = new Date();
-    confirmationDeadline.setSeconds(confirmationDeadline.getSeconds() + 5);
+    confirmationDeadline.setHours(confirmationDeadline.getHours() + 3);
     updatedReservation.confirmationDeadline = confirmationDeadline;
     await updatedReservation.save();
 
