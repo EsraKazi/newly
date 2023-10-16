@@ -1,98 +1,211 @@
-<%- include("../views/partials/header", { title: 'Swandor', name: 'reservation' })-%>
+<%- include("../views/partials/header", { title: 'Swandor' , name: 'reservation' })-%>
 
-</head>
-<body>
-<%- include("../views/partials/navbarManagement")-%>
+    </head>
 
-<div class="container-xl">
-    <div class="table-title">
-        <div class="row">
-            <div class="col-sm-6"><h2>Rezervasyonlar</h2></div>
-            <div class="col-sm-6">
-                <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-info">
-                        <input type="radio" name="status" value="beklemede"> Bekleyen
-                    </label>
-                    <label class="btn btn-success">
-                        <input type="radio" name="status" value="onaylandi"> Onaylanan
-                    </label>
-                    <label class="btn btn-danger">
-                        <input type="radio" name="status" value="reddedildi"> Reddedilen
-                    </label>
+    <body>
+        <%- include("../views/partials/navbarManagement")-%>
+
+            <div class="container-xl">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Rezervasyonlar</h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-info">
+                                    <input type="radio" name="status" value="beklemede"> Bekleyen
+                                </label>
+                                <label class="btn btn-success">
+                                    <input type="radio" name="status" value="onaylandi"> Onaylanan
+                                </label>
+                                <label class="btn btn-danger">
+                                    <input type="radio" name="status" value="reddedildi"> Reddedilen
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <input class="form-inline ml-auto" type="text" id="reservationId"
+                                placeholder="Rezervasyon Ara">
+                            <button class="btn btn-outline-secondary" type="button" formmethod="get"
+                                onclick="searchReservation()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="input-group">
-                    <input class="form-inline ml-auto"  type="text" id="reservationId" placeholder="Rezervasyon Ara">
-                    <button class="btn btn-outline-secondary" type="submit" formmethod="post" onclick="searchReservation()">
-                        <i class="fas fa-search"></i>
-                    </button>
-            </div>
-        </div>
-    </div>
 
-
-    
-    <div class="card-container">
-        <div class="osahan-account-page-right shadow-sm p-4 h-100">
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade active show" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                    <% reservationData.reverse().forEach((reservation) => { %>
-                    <div class="card mb-4 order-list shadow-sm status-<%= reservation.status %>">
-                        <div class="gold-members p-4">
-                            <div class="media">
-                                <div class="media-body">
-                                    <span class="float-right text-info"><%= reservation.agency %> - <%= reservation.reservationId %></span>
-                                    <h6 class="mb-2">
-                                        <p class="text-black"><%= reservation.hotel %> - <%= reservation.roomType %></p>
-                                    </h6>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="left-col">
-                                            <h3 class="text-gray mb-1"><i class="icofont-location-arrow"></i> <%= reservation.checkInDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %> - <%= reservation.checkOutDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %></h3>
-                                            <p class="mb-0 text-black text-primary pt-2"><span class="text-black font-weight-bold"> Durum:</span> <%= reservation.status %></p>
-                                        </div>
-                                        <div class="text-center middle-col">
-                                            <p class="text-gray text-limit mb-3"><i class="icofont-list"></i> <%= reservation.description %></p>
-                                        </div>
-                                        <div class="right-col">
-                                            <div class="float-right">
-                                                    <form action="/confirm/<%= reservation._id %>" method="POST" style="display: inline;">
-                                                        <input type="hidden" name="status" value="onaylandi">
-                                                        <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Onayla"><i class="fas fa-check fa-2xl"  style="color: #07bb22;"></i></button>
-                                                    </form>
-                                                    <form action="/update/<%= reservation.reservationId %>" method="POST" style="display: inline;">
-                                                        <button type="submit" class="btn btn-link" data-toggle="tooltip" title="Düzenle"> <i class="fa-solid fa-pen-to-square fa-2xl" style="color: #e9d502;"></i></button>
-                                                    </form>
-                                                                                                 
-                                                    <form action="/confirm/<%= reservation._id %>" method="POST" style="display: inline;">
-                                                        <input type="hidden" name="status" value="reddedildi">
-                                                        <button type="submit" class="btn btn-link"data-toggle="tooltip" title="Reddet"><i class="fas fa-times fa-2xl" style="color: #c80000;"></i></button>
-                                                    </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                <!-- Modal -->
+                <div class="modal fade" id="searchModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Rezervasyon Detayları</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Reservation ID: <span id="modalReservationId"></span></p>
+                                <p>Created By: <span id="modalCreatedBy"></span></p>
+                                <div class="form-group">
+                                    <label for="description">Açıklama</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4"
+                                        placeholder="Açıklama"></textarea>
                                 </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                                <button type="submit" class="btn btn-primary"
+                                    onclick="saveDescription()">Kaydet</button>
                             </div>
                         </div>
                     </div>
-                    <% }); %>
                 </div>
+
+
+                <div class="card-container">
+                    <div class="osahan-account-page-right shadow-sm p-4 h-100">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade active show" id="orders" role="tabpanel"
+                                aria-labelledby="orders-tab">
+                                <% reservationData.reverse().forEach((reservation)=> { %>
+                                    <div class="card mb-4 order-list shadow-sm status-<%= reservation.status %>">
+                                        <div class="gold-members p-4">
+                                            <div class="media">
+                                                <div class="media-body">
+                                                    <span class="float-right text-info">
+                                                        <%= reservation.agency %> - <%= reservation.reservationId %>
+                                                    </span>
+                                                    <h6 class="mb-2">
+                                                        <p class="text-black">
+                                                            <%= reservation.hotel %> - <%= reservation.roomType %>
+                                                        </p>
+                                                    </h6>
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="left-col">
+                                                            <h3 class="text-gray mb-1"><i
+                                                                    class="icofont-location-arrow"></i>
+                                                                <%= reservation.checkInDate.toLocaleDateString('tr-TR',
+                                                                    { day: 'numeric' , month: 'numeric'
+                                                                    }).replace(/\//g, '.' ) %> - <%=
+                                                                        reservation.checkOutDate.toLocaleDateString('tr-TR',
+                                                                        { day: 'numeric' , month: 'numeric'
+                                                                        }).replace(/\//g, '.' ) %>
+                                                            </h3>
+                                                            <p class="mb-0 text-black text-primary pt-2"><span
+                                                                    class="text-black font-weight-bold"> Durum:</span>
+                                                                <%= reservation.status %>
+                                                            </p>
+                                                        </div>
+                                                        <div class="text-center middle-col">
+                                                            <p class="text-gray text-limit mb-3"><i
+                                                                    class="icofont-list"></i>
+                                                                <%= reservation.description %>
+                                                            </p>
+                                                        </div>
+                                                        <div class="right-col">
+                                                            <div class="float-right">
+                                                                <form action="/confirm/<%= reservation._id %>"
+                                                                    method="POST" style="display: inline;">
+                                                                    <input type="hidden" name="status"
+                                                                        value="onaylandi">
+                                                                    <button type="submit" class="btn btn-link"
+                                                                        data-toggle="tooltip" title="Onayla"><i
+                                                                            class="fas fa-check fa-2xl"
+                                                                            style="color: #07bb22;"></i></button>
+                                                                </form>
+                                                                <form style="display: inline;">
+                                                                    <button type="button" class="btn btn-link"
+                                                                        data-toggle="tooltip" title="Düzenle"
+                                                                        onclick="searchReservation('<%= reservation.reservationId %>')">
+                                                                        <i class="fa-solid fa-pen-to-square fa-2xl"
+                                                                            style="color: #e9d502;"></i>
+                                                                    </button>
+                                                                </form>
+
+                                                                <form action="/confirm/<%= reservation._id %>"
+                                                                    method="POST" style="display: inline;">
+                                                                    <input type="hidden" name="status"
+                                                                        value="reddedildi">
+                                                                    <button type="submit" class="btn btn-link"
+                                                                        data-toggle="tooltip" title="Reddet"><i
+                                                                            class="fas fa-times fa-2xl"
+                                                                            style="color: #c80000;"></i></button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <script>
+                    function searchReservation(reservationId) {
+                        const reservationValue = document.getElementById("reservationId").value;
+
+                        if (reservationId) {
+                            // "Düzenle" butonu tıklanırsa bu kısım çalışır
+                            fetch(`/update/${reservationId}`)
+                                .then(response => {
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log(data);
+                                    // Handle the data obtained from reservationId
+                                    openModal(data);
+                                })
+                                .catch(error => {
+                                    console.error('Hata:', error);
+                                });
+                        } else if (reservationValue) {
+                            // "Arama" butonu tıklanırsa bu kısım çalışır
+                            fetch(`/update/${reservationValue}`)
+                                .then(response => {
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log(data);
+                                    // Handle the data obtained from the input field
+                                    openModal(data);
+                                })
+                                .catch(error => {
+                                    console.error('Hata:', error);
+                                });
+                        }
+                    }
+
+                    function openModal(data) {
+                        const modalKeys = Object.keys(data); // JSON verilerinin anahtarlarını alın
+
+                        modalKeys.forEach(key => {
+                            const modalElement = document.getElementById("modal" + key.charAt(0).toUpperCase() + key.slice(1));
+                            if (modalElement) {
+                                modalElement.textContent = data[key];
+                            }
+                        });
+
+                        // Modalı açar
+                        $('#searchModal').modal('show');
+                    }
+
+                    function saveDescription() {
+                        const description = document.getElementById("modalDescription").value;
+                        const status = "duzenlendi";
+                        // Veritabanına kaydetme işlemini burada yapabilirsiniz
+                    }
+
+
+                </script>
             </div>
-        </div>
-    </div>
 
 
-            
-    <script>
-        function searchReservation() {
-            const reservationValue = document.getElementById("reservationId").value;
-            if (reservationValue) {
-                fetch(`/update/${reservationValue}`, {
-                    method: 'POST', 
-                });
-            }
-        }
-    </script>
-</div>
-
-
-<%- include("../views/partials/footer")-%>
+            <%- include("../views/partials/footer")-%>

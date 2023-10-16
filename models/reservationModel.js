@@ -2,75 +2,75 @@ const mongoose = require("mongoose");
 
 const reservationSchema = mongoose.Schema({
   reservationId: {
-    type:String,
-    required: true
+    type: String,
+    required: true,
   },
   checkInDate: {
     type: Date,
-    required: true
+    required: true,
   },
 
   checkOutDate: {
     type: Date,
-    required: true
+    required: true,
   },
 
   roomType: {
     type: String,
-    required: true
+    required: true,
   },
 
   hotel: {
     type: String,
-    required: true
+    required: true,
   },
 
   agency: {
     type: String,
-    required: true
+    required: true,
   },
 
   createdBy: {
     type: String,
-    required: true
+    required: true,
   },
 
   createdAt: {
     type: Date,
-    required: true
+    required: true,
   },
 
   description: {
-    type: String
+    type: String,
   },
 
   status: {
     type: String,
     default: "beklemede",
-    required: true
+    required: true,
   },
 
   confirmed: {
-    type: Boolean
+    type: Boolean,
   },
   confirmedAt: {
-    type: Date
+    type: Date,
   },
 
   confirmedBy: {
-    type: String
+    type: String,
   },
   updatedAt: {
-    type: Date
+    type: Date,
   },
 
   updatedBy: {
-    type: String
+    type: String,
   },
 
   confirmationDeadline: {
-    type: Date
-  }
+    type: Date,
+  },
 });
 
-module.exports = mongoose.model('Reservation', reservationSchema);
+module.exports = mongoose.model("Reservation", reservationSchema);

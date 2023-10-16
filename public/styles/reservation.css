@@ -1,85 +1,84 @@
 body {
-    color: #566787;
-    font-family: 'Roboto', sans-serif;
-}/* Bekleyen durumu için kart rengi */
+  color: #566787;
+  font-family: "Roboto", sans-serif;
+} /* Bekleyen durumu için kart rengi */
 
 .order-list.status-beklemede {
-    background-color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
 }
 .order-list.status-duzenlendi {
-    background-color: #fcf5c7;
+  background-color: #fcf5c7;
 }
 
 /* Onaylanan durumu için kart rengi */
 .order-list.status-onaylandi {
-    background-color: 	#e2f4dc;
+  background-color: #e2f4dc;
 }
 
 /* Reddedilen durumu için kart rengi */
 .order-list.status-reddedildi {
-    background-color: #ffd6db;
+  background-color: #ffd6db;
 }
 
 /* Diğer durumlar için kart rengi */
 .order-list.status-suresi-doldu {
-    background-color: rgba(120, 120, 120, 0.307);
+  background-color: rgba(120, 120, 120, 0.307);
 }
 
 .middle-col {
-    flex-grow: 1; /* Oranlı olarak büyüsün */
+  flex-grow: 1; /* Oranlı olarak büyüsün */
 }
 .card-container {
-    max-height: 70vh; /* Kartların maksimum yüksekliği */
-    overflow: auto; /* Kartların taşmasını önler ve kaydırma çubuğunu ekler */
+  max-height: 70vh; /* Kartların maksimum yüksekliği */
+  overflow: auto; /* Kartların taşmasını önler ve kaydırma çubuğunu ekler */
 }
 
 .table-title .btn-group {
-    float: right;
+  float: right;
 }
 
 .table-title .btn {
-    min-width: 50px;
-    border-radius: 2px;
-    border: none;
-    padding: 6px 12px;
-    font-size: 95%;
-    outline: none !important;
-    height: 30px;
+  min-width: 50px;
+  border-radius: 2px;
+  border: none;
+  padding: 6px 12px;
+  font-size: 95%;
+  outline: none !important;
+  height: 30px;
 }
 
 .table-title {
-    min-width: 100%;
-    border-bottom: 1px solid #e9e9e9;
-    padding-bottom: 15px;
-    margin-bottom: 5px;
-    background: #b8a77a;
-    margin: -20px -31px 10px;
-    padding: 15px 30px;
-    color: #fff;
+  min-width: 100%;
+  border-bottom: 1px solid #e9e9e9;
+  padding-bottom: 15px;
+  margin-bottom: 5px;
+  background: #b8a77a;
+  margin: -20px -31px 10px;
+  padding: 15px 30px;
+  color: #fff;
 }
 
 .table-title h2 {
-    margin: 20px 0 0;
-    font-size: 24px;
+  margin: 20px 0 0;
+  font-size: 24px;
 }
 
-
 .btn label {
-    display: block;
-    text-align: justify;
+  display: block;
+  text-align: justify;
 }
 
 .btn input[type="radio"] {
-    display: none;
+  display: none;
 }
 
 .btn.active {
-    background-color: #007bff;
-    color: #fff;
+  background-color: #007bff;
+  color: #fff;
 }
 
 .btn.active label {
-    font-weight: bold;
+  font-weight: bold;
 }
 /* Modal container */
 .modal {
@@ -137,25 +136,23 @@ body {
 }
 
 @media (max-width: 768px) {
-    .btn label {
-        white-space: normal;
-        padding: 3px 6px; 
-        text-align: left;
-    }
+  .btn label {
+    white-space: normal;
+    padding: 3px 6px;
+    text-align: left;
+  }
 
-    .btn.btn-sm label {
-        font-size: 10px;
-    }
+  .btn.btn-sm label {
+    font-size: 10px;
+  }
 }
 
-
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: #b8a77a;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-  }
-  
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #b8a77a;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}

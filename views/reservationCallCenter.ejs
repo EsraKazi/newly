@@ -1,226 +1,265 @@
-<%- include("../views/partials/header", { title: 'Swandor', name: 'reservation' })-%>
+<%- include("../views/partials/header", { title: 'Swandor' , name: 'reservation' })-%>
 
 
-</head>
-<body>
-<%- include("../views/partials/navbar")-%>
-<div class="container-xl" style="background-color: #333c46;">
-  
-    <div class="table-title">
-        <div class="row">
-            <div class="col-sm-6"><h2>Rezervasyonlar</h2></div>
-            <div class="col-sm-6">
-                <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-info">
-                        <input type="radio" name="status" value="beklemede"> Bekleyen
-                    </label>
-                    <label class="btn btn-success">
-                        <input type="radio" name="status" value="onaylandi"> Onaylanan
-                    </label>
-                    <label class="btn btn-danger">
-                        <input type="radio" name="status" value="reddedildi"> Reddedilen
-                    </label>
+    </head>
+
+    <body>
+        <%- include("../views/partials/navbar")-%>
+            <div class="container-xl" style="background-color: #333c46;">
+
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Rezervasyonlar</h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-info">
+                                    <input type="radio" name="status" value="beklemede"> Bekleyen
+                                </label>
+                                <label class="btn btn-success">
+                                    <input type="radio" name="status" value="onaylandi"> Onaylanan
+                                </label>
+                                <label class="btn btn-danger">
+                                    <input type="radio" name="status" value="reddedildi"> Reddedilen
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#reservationModal">Yeni Rezervasyon</button>
+                            <form class="form-inline ml-auto">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Rezervasyon Ara"
+                                    aria-label="Search">
+                                <button class="btn btn-outline-secondary" data-toggle="modal"
+                                    data-target="#searchModal">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="input-group">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Yeni Rezervasyon</button>
-                <form class="form-inline ml-auto">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Rezervasyon Ara" aria-label="Search">
-                    <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#searchModal">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-
-<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reservationModalLabel">Yeni Rezervasyon Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/new" method="POST">
-                    <div class="form-group">
-                        <label for="checkInDate">Giriş Tarihi</label>
-                        <input type="date" id="checkInDate" name="checkInDate" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="checkOutDate">Çıkış Tarihi</label>
-                        <input type="date" id="checkOutDate" name="checkOutDate" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="hotel">Otel</label>
-                        <select id="hotel" name="hotel" class="form-control" required>
-                            <option value="" disabled selected>Otel Seçin</option>
-                            <% hotels.forEach((hotel) => { %>
-                                <option value="<%= hotel.name %>"><%= hotel.name %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="roomName">Oda Tipi</label>
-                        <select id="roomName" name="roomName" class="form-control" required>
-                            <option value="" disabled selected>Oda Tipi Seçin</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="agency">Acente</label>
-                        <select id="agency" name="agency" class="form-control" required>
-                            <option value="" disabled selected>Acente Seçin</option>
-                            <% agencies.forEach((agency) => { %>
-                                <option value="<%= agency.name %>"><%= agency.name %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Açıklama</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Açıklama"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Rezervasyon Ekle</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 
-
-    <div class="card-container">
-        <div class="osahan-account-page-right shadow-sm p-4 h-100">
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade active show" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                    <% reservationData.reverse().forEach((reservation) => { %>
-                    <div class="card mb-4 order-list shadow-sm status-<%= reservation.status %>">
-                        <div class="gold-members p-4">
-                            <div class="media">
-                                <div class="media-body">
-                                    <span class="float-right text-info"><%= reservation.agency %> - <%= reservation.reservationId %></span>
-                                    <h6 class="mb-2">
-                                        <p class="text-black"><%= reservation.hotel %> - <%= reservation.roomType %></p>
-                                    </h6>
-                                    <div class="d-flex justify-content-between">
-                                        <div class="left-col">
-                                            <h3 class="text-gray mb-1"><i class="icofont-location-arrow"></i> <%= reservation.checkInDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %> - <%= reservation.checkOutDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'numeric' }).replace(/\//g, '.') %></h3>
-                                            <p class="mb-0 text-black text-primary pt-2"><span class="text-black font-weight-bold"> Durum:</span> <%= reservation.status %></p>
-                                        </div>
-                                        <div class="text-center middle-col">
-                                            <p class="text-gray text-limit mb-3"><i class="icofont-list"></i> <%= reservation.description %></p>
-                                        </div>
-                                        <div class="right-col">
-                                            <div class="float-right">
-                                                <% if (reservation.status === 'beklemede') { %>
-                                                    <form action="/delete/<%= reservation._id %>" method="POST" style="display: inline;">
-                                                        <input type="hidden" name="status" value="deleted">
-                                                        <button class="btn btn-link" data-toggle="tooltip" title="Rezervasyonu Sil"><i class="fa-solid fa-xmark fa-2xl" style="color: #333c46;"></i></button>
-                                                    </form>
-                                                <% } %>
-                                            </div>
-                                        </div>
+                <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog"
+                    aria-labelledby="reservationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reservationModalLabel">Yeni Rezervasyon Ekle</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/new" method="POST">
+                                    <div class="form-group">
+                                        <label for="checkInDate">Giriş Tarihi</label>
+                                        <input type="date" id="checkInDate" name="checkInDate" class="form-control"
+                                            required>
                                     </div>
-                                </div>
+                                    <div class="form-group">
+                                        <label for="checkOutDate">Çıkış Tarihi</label>
+                                        <input type="date" id="checkOutDate" name="checkOutDate" class="form-control"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hotel">Otel</label>
+                                        <select id="hotel" name="hotel" class="form-control" required>
+                                            <option value="" disabled selected>Otel Seçin</option>
+                                            <% hotels.forEach((hotel)=> { %>
+                                                <option value="<%= hotel.name %>">
+                                                    <%= hotel.name %>
+                                                </option>
+                                                <% }); %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="roomName">Oda Tipi</label>
+                                        <select id="roomName" name="roomName" class="form-control" required>
+                                            <option value="" disabled selected>Oda Tipi Seçin</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="agency">Acente</label>
+                                        <select id="agency" name="agency" class="form-control" required>
+                                            <option value="" disabled selected>Acente Seçin</option>
+                                            <% agencies.forEach((agency)=> { %>
+                                                <option value="<%= agency.name %>">
+                                                    <%= agency.name %>
+                                                </option>
+                                                <% }); %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Açıklama</label>
+                                        <textarea class="form-control" id="description" name="description" rows="4"
+                                            placeholder="Açıklama"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Rezervasyon Ekle</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <% }); %>
                 </div>
+
+
+
+                <div class="card-container">
+                    <div class="osahan-account-page-right shadow-sm p-4 h-100">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade active show" id="orders" role="tabpanel"
+                                aria-labelledby="orders-tab">
+                                <% reservationData.reverse().forEach((reservation)=> { %>
+                                    <div class="card mb-4 order-list shadow-sm status-<%= reservation.status %>">
+                                        <div class="gold-members p-4">
+                                            <div class="media">
+                                                <div class="media-body">
+                                                    <span class="float-right text-info">
+                                                        <%= reservation.agency %> - <%= reservation.reservationId %>
+                                                    </span>
+                                                    <h6 class="mb-2">
+                                                        <p class="text-black">
+                                                            <%= reservation.hotel %> - <%= reservation.roomType %>
+                                                        </p>
+                                                    </h6>
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="left-col">
+                                                            <h3 class="text-gray mb-1"><i
+                                                                    class="icofont-location-arrow"></i>
+                                                                <%= reservation.checkInDate.toLocaleDateString('tr-TR',
+                                                                    { day: 'numeric' , month: 'numeric'
+                                                                    }).replace(/\//g, '.' ) %> - <%=
+                                                                        reservation.checkOutDate.toLocaleDateString('tr-TR',
+                                                                        { day: 'numeric' , month: 'numeric'
+                                                                        }).replace(/\//g, '.' ) %>
+                                                            </h3>
+                                                            <p class="mb-0 text-black text-primary pt-2"><span
+                                                                    class="text-black font-weight-bold"> Durum:</span>
+                                                                <%= reservation.status %>
+                                                            </p>
+                                                        </div>
+                                                        <div class="text-center middle-col">
+                                                            <p class="text-gray text-limit mb-3"><i
+                                                                    class="icofont-list"></i>
+                                                                <%= reservation.description %>
+                                                            </p>
+                                                        </div>
+                                                        <div class="right-col">
+                                                            <div class="float-right">
+                                                                <% if (reservation.status==='beklemede' ) { %>
+                                                                    <form action="/delete/<%= reservation._id %>"
+                                                                        method="POST" style="display: inline;">
+                                                                        <input type="hidden" name="status"
+                                                                            value="deleted">
+                                                                        <button class="btn btn-link"
+                                                                            data-toggle="tooltip"
+                                                                            title="Rezervasyonu Sil"><i
+                                                                                class="fa-solid fa-xmark fa-2xl"
+                                                                                style="color: #333c46;"></i></button>
+                                                                    </form>
+                                                                    <% } %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const modal = new bootstrap.Modal(document.getElementById("reservationModal"));
+
+                        // Check-in ve Check-out alanlarını al
+                        const checkInDateInput = document.getElementById("checkInDate");
+                        const checkOutDateInput = document.getElementById("checkOutDate");
+
+                        // Bugünün tarihini al ve Check-in alanının minimum değerine ayarla
+                        const today = new Date().toISOString().split("T")[0];
+                        checkInDateInput.min = today;
+
+                        // Check-in tarihi değiştiğinde
+                        checkInDateInput.addEventListener("change", function () {
+                            const checkInDate = new Date(this.value);
+                            const checkOutDate = new Date(checkOutDateInput.value);
+
+                            // Eğer Check-out tarihi, Check-in tarihinden önceyse, Check-out tarihini sıfırla
+                            if (checkOutDate < checkInDate) {
+                                checkOutDateInput.value = this.value;
+                            }
+
+                            // Check-out alanının minimum değerini ayarla
+                            checkOutDateInput.min = this.value;
+                        });
+
+                        // Otel seçildiğinde odaları yükle
+                        const hotelDropdown = document.getElementById('hotel');
+                        hotelDropdown.addEventListener('change', () => {
+                            const roomDropdown = document.getElementById('roomName');
+                            roomDropdown.innerHTML = '<option value="" disabled selected>Oda Tipi</option>';
+
+                            const hotelName = hotelDropdown.value;
+                            if (hotelName) {
+                                fetch(`/getRooms/${hotelName}`)
+                                    .then((response) => {
+                                        return response.json();
+                                    })
+                                    .then((rooms) => {
+                                        rooms.forEach((room) => {
+                                            const option = document.createElement('option');
+                                            option.value = room;
+                                            option.textContent = room;
+                                            roomDropdown.appendChild(option);
+                                        });
+                                    });
+                            }
+                        });
+
+                        // "Rezervasyon Ekle" düğmesine tıklanınca modalı aç
+                        document.getElementById("openModalButton").addEventListener("click", function () {
+                            modal.show();
+                        });
+
+                        // "Rezervasyon Ekle" düğmesine tıklanınca formu gönder
+                        document.getElementById("submitReservation").addEventListener("click", function () {
+                            const checkInDate = document.getElementById('checkInDate').value;
+                            const checkOutDate = document.getElementById('checkOutDate').value;
+                            const hotel = document.getElementById('hotel').value;
+                            const roomName = document.getElementById('roomName').value;
+                            const agency = document.getElementById('agency').value;
+                            const description = document.getElementById('description').value;
+                            modal.hide();
+                        });
+
+                        $(document).ready(function () {
+                            $("input[type='radio']").change(function () {
+                                var inputValue = $(this).val();
+                                filterCards(inputValue);
+                            });
+
+                            // Varsayılan olarak "all" radyo düğmesini işaretle
+                            $("input[name='status'][value='all']").prop("checked", true);
+                            filterCards("all");
+
+                            function filterCards(value) {
+                                if (value == 'all') {
+                                    $(".order-list").show();
+                                } else {
+                                    $(".order-list").hide();
+                                    $(".order-list.status-" + value).show();
+                                }
+                            }
+                        });
+                    });
+
+
+
+                </script>
             </div>
-        </div>
-    </div>
-    <script>
- 
-        document.addEventListener("DOMContentLoaded", function () {
-           const modal = new bootstrap.Modal(document.getElementById("reservationModal"));
-       
-           // Check-in ve Check-out alanlarını al
-           const checkInDateInput = document.getElementById("checkInDate");
-           const checkOutDateInput = document.getElementById("checkOutDate");
-       
-           // Bugünün tarihini al ve Check-in alanının minimum değerine ayarla
-           const today = new Date().toISOString().split("T")[0];
-           checkInDateInput.min = today;
-       
-           // Check-in tarihi değiştiğinde
-           checkInDateInput.addEventListener("change", function () {
-               const checkInDate = new Date(this.value);
-               const checkOutDate = new Date(checkOutDateInput.value);
-       
-               // Eğer Check-out tarihi, Check-in tarihinden önceyse, Check-out tarihini sıfırla
-               if (checkOutDate < checkInDate) {
-                   checkOutDateInput.value = this.value;
-               }
-       
-               // Check-out alanının minimum değerini ayarla
-               checkOutDateInput.min = this.value;
-           });
-       
-           // Otel seçildiğinde odaları yükle
-           const hotelDropdown = document.getElementById('hotel');
-           hotelDropdown.addEventListener('change', () => {
-               const roomDropdown = document.getElementById('roomName');
-               roomDropdown.innerHTML = '<option value="" disabled selected>Oda Tipi</option>';
-       
-               const hotelName = hotelDropdown.value;
-               if (hotelName) {
-                   fetch(`/getRooms/${hotelName}`)
-                       .then((response) => {
-                           return response.json();
-                       })
-                       .then((rooms) => {
-                           rooms.forEach((room) => {
-                               const option = document.createElement('option');
-                               option.value = room;
-                               option.textContent = room;
-                               roomDropdown.appendChild(option);
-                           });
-                       });
-               }
-           });
-       
-           // "Rezervasyon Ekle" düğmesine tıklanınca modalı aç
-           document.getElementById("openModalButton").addEventListener("click", function () {
-               modal.show();
-           });
-       
-           // "Rezervasyon Ekle" düğmesine tıklanınca formu gönder
-           document.getElementById("submitReservation").addEventListener("click", function () {
-               const checkInDate = document.getElementById('checkInDate').value;
-               const checkOutDate = document.getElementById('checkOutDate').value;
-               const hotel = document.getElementById('hotel').value;
-               const roomName = document.getElementById('roomName').value;
-               const agency = document.getElementById('agency').value;
-               const description = document.getElementById('description').value;
-               modal.hide();
-           });
-       
-           $(document).ready(function () {
-               $("input[type='radio']").change(function () {
-                   var inputValue = $(this).val();
-                   filterCards(inputValue);
-               });
-       
-               // Varsayılan olarak "all" radyo düğmesini işaretle
-               $("input[name='status'][value='all']").prop("checked", true);
-               filterCards("all");
-       
-               function filterCards(value) {
-                   if (value == 'all') {
-                       $(".order-list").show();
-                   } else {
-                       $(".order-list").hide();
-                       $(".order-list.status-" + value).show();
-                   }
-               }
-           });
-       });
-       
-       
-       
-       </script>
-</div>
-<%- include("../views/partials/footer")-%>
+            <%- include("../views/partials/footer")-%>
